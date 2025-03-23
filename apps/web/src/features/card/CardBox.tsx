@@ -1,35 +1,40 @@
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Card } from "./api/type";
-import { CSSProperties, PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 
 type CardBoxProps = PropsWithChildren<{
   card: Card;
+  zIndex: number;
   onMemorized: (card: Card) => void;
+  onForgot: (card: Card) => void;
 }>;
 
-const HIDDEN_Z_INDEX = -1;
-const BG_FRONT = "#c0f3ff";
-const BG_BACK = "#f0f0f0";
-const ROTATION_FRONT = "rotate3d(1, 1, 1, 0deg)";
-const ROTATION_BACK = "rotate3d(1, 1, 1, 360deg)";
+const ROTATION_FRONT = "rotateY(0deg)";
+const ROTATION_BACK = "rotateY(180deg)";
 
 export const CardBox = (props: CardBoxProps) => {
   // Dynamic Styles
-  const [cardStyle, setCardStyle] = useState<CSSProperties>({
-    zIndex: props.card.memorized ? HIDDEN_Z_INDEX : props.card.order,
-  });
-  const [{ x, y }, draggingApi] = useSpring(() => ({
+  const [zIndex, setZIndex] = useState(props.zIndex);
+  useEffect(() => {
+    setZIndex(props.zIndex);
+  }, [props]);
+
+  const [{ x, y }, draggingEffectApi] = useSpring(() => ({
     x: 0,
     y: 0,
   }));
-  const [{ scale }, activeApi] = useSpring(() => ({
+
+  const [{ scale }, hoverEffectApi] = useSpring(() => ({
     scale: 1,
   }));
-  const [{ transform, backgroundColor }, flipApi] = useSpring(() => ({
+
+  const [{ transform }, flipEffectApi] = useSpring(() => ({
     transform: ROTATION_FRONT,
-    backgroundColor: BG_FRONT,
+    config: {
+      duration: 50,
+    },
   }));
   const [flipped, setFlipped] = useState(false);
 
@@ -39,81 +44,119 @@ export const CardBox = (props: CardBoxProps) => {
       down,
       movement: [mx, my],
       active: gestureActive,
-      velocity: [vx],
       direction: [dx],
       last,
       distance,
     }) => {
-      // Dragging effect
-      draggingApi.start({
+      // Swipe
+      const swiped = !gestureActive;
+      const swipedLeft = dx === -1 && swiped;
+      const swipedRight = dx === 1 && swiped;
+      if (swipedLeft) {
+        hideCard();
+      }
+      if (swipedRight) {
+        props.onForgot(props.card);
+      }
+      // Dragging
+      draggingEffectApi.start({
         x: down ? mx : 0,
         y: down ? my : 0,
         immediate: down,
+        config: {
+          duration: down ? 0 : 200,
+        },
       });
-      activeApi.start({
+      hoverEffectApi.start({
         scale: down ? 1.1 : 1,
         config: {
           duration: 100,
         },
       });
-
-      // Left swipe
-      const flipVelocityThreshold = vx > 0.1;
-      if (dx === -1 && !gestureActive && flipVelocityThreshold) {
-        props.onMemorized(props.card);
-        setTimeout(() => {
-          setCardStyle({
-            ...cardStyle,
-            zIndex: HIDDEN_Z_INDEX,
-          });
-        }, 300);
-      }
-
       // Short press
-      if (last && distance[0] < 5 && distance[1] < 5) {
+      if (last && distance[0] < 2 && distance[1] < 2) {
         setFlipped(!flipped);
-        flipApi.start({
+        flipEffectApi.start({
           transform: flipped ? ROTATION_FRONT : ROTATION_BACK,
-          backgroundColor: flipped ? BG_FRONT : BG_BACK,
         });
       }
     }
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+  function hideCard() {
+    ref.current
+      ?.animate(
+        [
+          {
+            opacity: 1,
+          },
+          {
+            opacity: 0,
+          },
+        ],
+        {
+          duration: 100,
+          iterations: 1,
+        }
+      )
+      .finished.then(() => {
+        if (ref.current?.style) {
+          ref.current.style.opacity = "0";
+          props.onMemorized(props.card);
+        }
+      });
+  }
+
+  // Re-render after being reordered
+  useEffect(() => {
+    draggingEffectApi.start({
+      x: 0,
+      y: 0,
+      immediate: false,
+    });
+  }, [draggingEffectApi]);
+  useEffect(() => {
+    hoverEffectApi.start({
+      scale: 1,
+      config: {
+        duration: 100,
+      },
+    });
+  }, [hoverEffectApi]);
+
   return (
     <StyledCard
+      ref={ref}
       key={props.card.title}
       as={animated.div}
       style={{
         x,
         y,
         scale,
-        transform,
-        backgroundColor,
-        ...cardStyle,
+        zIndex,
       }}
-      $fadedOut={props.card.memorized}
       {...bind()}
     >
-      {flipped ? (
-        <CardContent>{props.card.content}</CardContent>
-      ) : (
-        <CardTitle>{props.card.title}</CardTitle>
-      )}
+      <CardContent
+        as={animated.div}
+        style={{
+          transform,
+        }}
+      >
+        <CardFront>{props.card.title}</CardFront>
+        <CardBack>{props.card.content}</CardBack>
+      </CardContent>
     </StyledCard>
   );
 };
 
-const StyledCard = styled.div<{
-  $fadedOut: boolean;
-}>`
+const StyledCard = styled.div`
   position: absolute;
   width: 300px;
   height: 300px;
-  padding: 16px;
   border-radius: 12px;
 
-  opacity: ${({ $fadedOut }) => ($fadedOut ? 0 : 1)};
   transition: opacity 0.3s ease;
 
   display: flex;
@@ -123,12 +166,39 @@ const StyledCard = styled.div<{
 
   box-shadow: rgba(165, 165, 165, 0.2) 0px 7px 29px 0px;
 `;
-const CardTitle = styled.h2`
+
+const CardContent = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  transform-style: preserve-3d;
+`;
+const CardContentStyle = css`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+`;
+const CardFront = styled.h2`
+  ${CardContentStyle};
+  background-color: #4ae466;
   color: black;
 `;
-const CardContent = styled.h3`
+const CardBack = styled.h3`
+  ${CardContentStyle};
+  background-color: #f0f0f0;
   color: black;
 
   width: 100%;
   height: 100%;
+
+  transform: rotateY(180deg);
 `;

@@ -5,7 +5,9 @@ Backend is a private repo for security reasons.
 
 ## Tech Stack
 
-- Next.js
-- ReactQuery
-- Redux Tool Kit
-- Emotion
+- next.js
+- react-query
+- redux-toolkit
+- styled-components
+- react-spring
+- use-gesture

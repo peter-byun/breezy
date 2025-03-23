@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Card } from "./api/type";
 import { dummyCards } from "./api/dummy";
+const sortedDummyCards = sortCards(dummyCards);
 
 export const useCard = () => {
-  const [cards, setCards] = useState<Card[]>(dummyCards);
+  // TODO: Fetch it from the backend
+  const [cards, setCards] = useState<Card[]>(sortedDummyCards);
+
+  const cardsToShow = cards.filter((card) => !card.memorized);
 
   const createCard = (card: Card) => {
     setCards([...cards, card]);
@@ -19,5 +23,30 @@ export const useCard = () => {
     );
   };
 
-  return { cards, memorizeCard, createCard };
+  const forgetCard = (card: Card) => {
+    const cardIdxToForget = cards.findIndex((c) => c.title === card.title);
+
+    const nextCards = [...cards];
+    nextCards.splice(cardIdxToForget, 1);
+    nextCards.push(card);
+
+    setCards(nextCards);
+  };
+
+  const resetCards = () => {
+    setCards([...sortedDummyCards]);
+  };
+
+  return {
+    cards,
+    cardsToShow,
+    createCard,
+    memorizeCard,
+    forgetCard,
+    resetCards,
+  };
 };
+
+function sortCards(cards: Card[]) {
+  return [...cards].sort((a, b) => a.order - b.order);
+}
