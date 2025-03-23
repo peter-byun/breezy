@@ -14,7 +14,6 @@ export default function Home() {
             key={card.title}
             card={card}
             onMemorized={(card) => {
-              console.log(card);
               memorizeCard(card);
             }}
           >

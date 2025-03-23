@@ -10,48 +10,75 @@ type CardBoxProps = PropsWithChildren<{
 }>;
 
 const HIDDEN_Z_INDEX = -1;
+const BG_FRONT = "#c0f3ff";
+const BG_BACK = "#f0f0f0";
+const ROTATION_FRONT = "rotate3d(1, 1, 1, 0deg)";
+const ROTATION_BACK = "rotate3d(1, 1, 1, 360deg)";
 
 export const CardBox = (props: CardBoxProps) => {
+  // Dynamic Styles
   const [cardStyle, setCardStyle] = useState<CSSProperties>({
     zIndex: props.card.memorized ? HIDDEN_Z_INDEX : props.card.order,
   });
+  const [{ x, y }, draggingApi] = useSpring(() => ({
+    x: 0,
+    y: 0,
+  }));
+  const [{ scale }, activeApi] = useSpring(() => ({
+    scale: 1,
+  }));
+  const [{ transform, backgroundColor }, flipApi] = useSpring(() => ({
+    transform: ROTATION_FRONT,
+    backgroundColor: BG_FRONT,
+  }));
+  const [flipped, setFlipped] = useState(false);
 
-  // Dragging animation
-  const [{ x, y }, api] = useSpring(() => ({ x: 0, y: 0 }));
+  // Dragging Handler
   const bind = useDrag(
-    ({ down, movement: [mx, my], active, velocity: [vx], direction: [dx] }) => {
-      api.start({ x: down ? mx : 0, y: down ? my : 0, immediate: down });
+    ({
+      down,
+      movement: [mx, my],
+      active: gestureActive,
+      velocity: [vx],
+      direction: [dx],
+      last,
+      distance,
+    }) => {
+      // Dragging effect
+      draggingApi.start({
+        x: down ? mx : 0,
+        y: down ? my : 0,
+        immediate: down,
+      });
+      activeApi.start({
+        scale: down ? 1.1 : 1,
+        config: {
+          duration: 100,
+        },
+      });
 
-      const trigger = vx > 0.1;
-      if (dx === -1 && !active && trigger) {
+      // Left swipe
+      const flipVelocityThreshold = vx > 0.1;
+      if (dx === -1 && !gestureActive && flipVelocityThreshold) {
         props.onMemorized(props.card);
         setTimeout(() => {
           setCardStyle({
+            ...cardStyle,
             zIndex: HIDDEN_Z_INDEX,
           });
         }, 300);
       }
+
+      // Short press
+      if (last && distance[0] < 5 && distance[1] < 5) {
+        setFlipped(!flipped);
+        flipApi.start({
+          transform: flipped ? ROTATION_FRONT : ROTATION_BACK,
+          backgroundColor: flipped ? BG_FRONT : BG_BACK,
+        });
+      }
     }
   );
-
-  // Flip animation
-  const [
-    { transform: flipTransform, backgroundColor: flipBackgroundColor },
-    flipApi,
-  ] = useSpring(() => ({
-    transform: "rotate3d(1, 1, 1, 0deg)",
-    backgroundColor: "#A1EAFB",
-  }));
-  const [flipped, setFlipped] = useState(false);
-  const flipCard = () => {
-    setFlipped(!flipped);
-    flipApi.start({
-      transform: flipped
-        ? "rotate3d(1, 1, 1, 0deg)"
-        : "rotate3d(1, 1, 1, 360deg)",
-      backgroundColor: flipped ? "#A1EAFB" : "rgb(240, 240, 240)",
-    });
-  };
 
   return (
     <StyledCard
@@ -60,13 +87,13 @@ export const CardBox = (props: CardBoxProps) => {
       style={{
         x,
         y,
-        transform: flipTransform,
-        backgroundColor: flipBackgroundColor,
+        scale,
+        transform,
+        backgroundColor,
         ...cardStyle,
       }}
-      {...bind()}
       $fadedOut={props.card.memorized}
-      onClick={flipCard}
+      {...bind()}
     >
       {flipped ? (
         <CardContent>{props.card.content}</CardContent>
@@ -81,7 +108,6 @@ const StyledCard = styled.div<{
   $fadedOut: boolean;
 }>`
   position: absolute;
-  background-color: #a1eafb;
   width: 300px;
   height: 300px;
   padding: 16px;
@@ -95,13 +121,11 @@ const StyledCard = styled.div<{
   justify-content: center;
   overflow: hidden;
 
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(165, 165, 165, 0.2) 0px 7px 29px 0px;
 `;
-
 const CardTitle = styled.h2`
   color: black;
 `;
-
 const CardContent = styled.h3`
   color: black;
 
