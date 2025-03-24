@@ -1,20 +1,33 @@
 import { animated, useSpring } from "@react-spring/web";
 import { useDrag } from "@use-gesture/react";
-import styled, { css } from "styled-components";
-import { Card } from "./api/type";
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+
+import { Card } from "../api/type";
+import {
+  PropsWithChildren,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { CardBack, CardBoxRoot, CardContent, CardFront } from "./CardBoxStyle";
+
+export type CardBoxRef = RefObject<HTMLDivElement | null>;
 
 type CardBoxProps = PropsWithChildren<{
   card: Card;
   zIndex: number;
-  onMemorized: (card: Card) => void;
-  onForgot: (card: Card) => void;
+  size?: number;
+  onSwipeLeft?: (card: Card, ref: CardBoxRef) => void;
+  onSwipeRight?: (card: Card, ref: CardBoxRef) => void;
 }>;
 
 const ROTATION_FRONT = "rotateY(0deg)";
 const ROTATION_BACK = "rotateY(180deg)";
 
 export const CardBox = (props: CardBoxProps) => {
+  const { size = 300 } = props;
+  const ref = useRef<HTMLDivElement>(null);
+
   // Dynamic Styles
   const [zIndex, setZIndex] = useState(props.zIndex);
   useEffect(() => {
@@ -53,10 +66,10 @@ export const CardBox = (props: CardBoxProps) => {
       const swipedLeft = dx === -1 && swiped;
       const swipedRight = dx === 1 && swiped;
       if (swipedLeft) {
-        hideCard();
+        props.onSwipeLeft?.(props.card, ref);
       }
       if (swipedRight) {
-        props.onForgot(props.card);
+        props.onSwipeRight?.(props.card, ref);
       }
       // Dragging
       draggingEffectApi.start({
@@ -83,31 +96,6 @@ export const CardBox = (props: CardBoxProps) => {
     }
   );
 
-  const ref = useRef<HTMLDivElement>(null);
-  function hideCard() {
-    ref.current
-      ?.animate(
-        [
-          {
-            opacity: 1,
-          },
-          {
-            opacity: 0,
-          },
-        ],
-        {
-          duration: 100,
-          iterations: 1,
-        }
-      )
-      .finished.then(() => {
-        if (ref.current?.style) {
-          ref.current.style.opacity = "0";
-          props.onMemorized(props.card);
-        }
-      });
-  }
-
   // Re-render after being reordered
   useEffect(() => {
     draggingEffectApi.start({
@@ -126,7 +114,7 @@ export const CardBox = (props: CardBoxProps) => {
   }, [hoverEffectApi]);
 
   return (
-    <StyledCard
+    <CardBoxRoot
       ref={ref}
       key={props.card.title}
       as={animated.div}
@@ -137,6 +125,7 @@ export const CardBox = (props: CardBoxProps) => {
         zIndex,
       }}
       {...bind()}
+      $size={size}
     >
       <CardContent
         as={animated.div}
@@ -147,58 +136,6 @@ export const CardBox = (props: CardBoxProps) => {
         <CardFront>{props.card.title}</CardFront>
         <CardBack>{props.card.content}</CardBack>
       </CardContent>
-    </StyledCard>
+    </CardBoxRoot>
   );
 };
-
-const StyledCard = styled.div`
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 12px;
-
-  transition: opacity 0.3s ease;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-
-  box-shadow: rgba(165, 165, 165, 0.2) 0px 7px 29px 0px;
-`;
-
-const CardContent = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  transform-style: preserve-3d;
-`;
-const CardContentStyle = css`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  padding: 16px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  -webkit-backface-visibility: hidden; /* Safari */
-  backface-visibility: hidden;
-`;
-const CardFront = styled.h2`
-  ${CardContentStyle};
-  background-color: #4ae466;
-  color: black;
-`;
-const CardBack = styled.h3`
-  ${CardContentStyle};
-  background-color: #f0f0f0;
-  color: black;
-
-  width: 100%;
-  height: 100%;
-
-  transform: rotateY(180deg);
-`;
