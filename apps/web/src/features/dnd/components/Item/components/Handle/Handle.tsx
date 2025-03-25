@@ -2,11 +2,11 @@ import React, { Ref } from "react";
 
 import { Action, ActionProps } from "../Action";
 
-export const Handle = (
-  props: ActionProps & {
-    ref: Ref<HTMLButtonElement>;
-  }
-) => {
+export type HandleProps = ActionProps & {
+  ref?: Ref<HTMLButtonElement>;
+};
+
+export const Handle = (props: HandleProps) => {
   return (
     <Action
       {...props}

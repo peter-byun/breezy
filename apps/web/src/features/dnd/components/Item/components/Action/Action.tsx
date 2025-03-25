@@ -19,7 +19,7 @@ export const Action = ({
   style,
   ...props
 }: Props & {
-  ref: Ref<HTMLButtonElement>;
+  ref?: Ref<HTMLButtonElement>;
 }) => {
   return (
     <button

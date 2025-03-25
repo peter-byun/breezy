@@ -6,7 +6,8 @@ export const CardBoxRoot = styled.div<{
   position: absolute;
   width: ${({ $size }) => `${$size}px`};
   height: ${({ $size }) => `${$size}px`};
-  border-radius: 12px;
+  border: 1px solid #efefef;
+  border-radius: 6px;
 
   transition: opacity 0.3s ease;
 
@@ -15,7 +16,7 @@ export const CardBoxRoot = styled.div<{
   justify-content: center;
   overflow: hidden;
 
-  box-shadow: rgba(165, 165, 165, 0.2) 0px 7px 29px 0px;
+  box-shadow: rgba(165, 165, 165, 0.1) 0px 10px 10px 0px;
   :hover {
     cursor: pointer;
   }
@@ -45,13 +46,13 @@ const CardContentStyle = css`
 `;
 export const CardFront = styled.h2`
   ${CardContentStyle};
-  background-color: #4ae466;
+  background-color: #fcfcfc;
   color: black;
 `;
 export const CardBack = styled.h3`
   ${CardContentStyle};
-  background-color: #f0f0f0;
-  color: black;
+  background-color: #434343;
+  color: #f0f0f0;
 
   width: 100%;
   height: 100%;

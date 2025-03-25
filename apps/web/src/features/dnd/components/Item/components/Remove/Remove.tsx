@@ -4,7 +4,7 @@ import { Action, ActionProps } from "../Action";
 
 export function Remove(
   props: ActionProps & {
-    ref: Ref<HTMLButtonElement>;
+    ref?: Ref<HTMLButtonElement>;
   }
 ) {
   return (

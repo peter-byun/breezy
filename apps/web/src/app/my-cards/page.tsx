@@ -1,90 +1,145 @@
 "use client";
-import { useCard } from "@/features/card/useCard";
+
+import React, { useState } from "react";
+import { createPortal } from "react-dom";
+import VirtualList from "react-tiny-virtual-list";
+import styles from "./my-cards.module.css";
+
+import {
+  closestCenter,
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  UniqueIdentifier,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  sortableKeyboardCoordinates,
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { Wrapper } from "@/features/dnd/components/Wrapper";
+import {
+  SortableItem,
+  SortableProps,
+} from "@/features/dnd/components/Sortable";
+import { Item } from "@/features/dnd/components/Item";
 import { PageLayout } from "@/features/layout/PageLayout";
 import { TopNavBar } from "@/features/nav-bar/TopNavBar";
-import styled from "styled-components";
-
-import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-import { PropsWithChildren } from "react";
-import {
-  CardBoxRoot,
-  CardContent,
-  CardFront,
-} from "@/features/card/CardBox/CardBoxStyle";
+import { useCard } from "@/features/card/useCard";
+import { Card } from "@/features/card/api/type";
 
 export default function MyCards() {
   const { cardsToShow } = useCard();
+  const [sortedCards, setSortedCards] = useState<Card[]>(cardsToShow);
+
+  const {
+    adjustScale = false,
+    strategy = verticalListSortingStrategy,
+    handle = false,
+    getItemStyles = () => ({}),
+    modifiers,
+  }: SortableProps = {};
+
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+  const getIndex = (id: UniqueIdentifier) =>
+    sortedCards.findIndex((card) => card.id === id);
+  const activeIndex = activeId != null ? getIndex(activeId) : -1;
 
   return (
     <PageLayout>
       <TopNavBar />
-      <DndContext>
-        <CardsGrid>
-          {cardsToShow.map((card) => (
-            <CardHolder key={card.title} id={card.title}>
-              <CardBoxRoot $size={200}>
-                <CardContent>
-                  <CardFront>{card.title}</CardFront>
-                </CardContent>
-              </CardBoxRoot>
-            </CardHolder>
-          ))}
-        </CardsGrid>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={({ active }) => {
+          setActiveId(active.id);
+        }}
+        onDragEnd={({ over }) => {
+          if (over) {
+            const overIndex = getIndex(over.id);
+            if (activeIndex !== overIndex) {
+              setSortedCards((items) =>
+                arrayMove(items, activeIndex, overIndex)
+              );
+            }
+          }
+
+          setActiveId(null);
+        }}
+        onDragCancel={() => setActiveId(null)}
+        modifiers={modifiers}
+      >
+        <Wrapper center={true}>
+          <SortableContext items={sortedCards} strategy={strategy}>
+            <VirtualList
+              width={300}
+              height={800}
+              itemCount={sortedCards.length}
+              itemSize={64}
+              stickyIndices={
+                activeId != null
+                  ? [sortedCards.findIndex((sc) => sc.id === activeId)]
+                  : undefined
+              }
+              renderItem={({ index, style }) => {
+                const id = sortedCards[index].id;
+
+                return (
+                  <SortableItem
+                    key={id}
+                    id={id}
+                    index={index}
+                    handle={handle}
+                    wrapperStyle={() => ({
+                      ...style,
+                      padding: 5,
+                    })}
+                    style={getItemStyles}
+                    useDragOverlay
+                    renderItem={() => <>{sortedCards[index]?.title}</>}
+                  />
+                );
+              }}
+              className={styles.VirtualList}
+            />
+          </SortableContext>
+        </Wrapper>
+        {typeof window !== "undefined" &&
+          createPortal(
+            <DragOverlay adjustScale={adjustScale}>
+              {activeId != null ? (
+                <Item
+                  value={sortedCards[activeIndex].content}
+                  handle={handle}
+                  style={getItemStyles({
+                    id: activeId,
+                    index: activeIndex,
+                    isDragging: true,
+                    isSorting: true,
+                    overIndex: -1,
+                    isDragOverlay: true,
+                  })}
+                  wrapperStyle={{
+                    padding: 5,
+                  }}
+                  dragOverlay
+                  renderItem={() => <>{sortedCards[activeIndex]?.title}</>}
+                />
+              ) : null}
+            </DragOverlay>,
+            document.body
+          )}
       </DndContext>
     </PageLayout>
   );
 }
-
-const CardsGrid = (props: PropsWithChildren<{}>) => {
-  return <StyledCardsGrid>{props.children}</StyledCardsGrid>;
-};
-const StyledCardsGrid = styled.section`
-  position: relative;
-
-  background-color: transparent;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-`;
-
-const CardHolder = (
-  props: PropsWithChildren<{
-    id: string;
-  }>
-) => {
-  const { setNodeRef: setDroppableRef } = useDroppable({
-    id: "droppable-" + props.id,
-  });
-
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: "draggable-" + props.id,
-  });
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
-
-  return (
-    <CardHolderDroppable ref={setDroppableRef}>
-      <StyledCardHolder
-        ref={setNodeRef}
-        style={style}
-        {...listeners}
-        {...attributes}
-      >
-        {props.children}
-      </StyledCardHolder>
-    </CardHolderDroppable>
-  );
-};
-const StyledCardHolder = styled.div`
-  position: relative;
-  width: 200px;
-  height: 200px;
-`;
-const CardHolderDroppable = styled.div``;

@@ -6,6 +6,7 @@ import type { Transform } from "@dnd-kit/utilities";
 import { Handle, Remove } from "./components";
 
 import styles from "./Item.module.css";
+import { HandleProps } from "./components/Handle/Handle";
 
 export interface Props {
   dragOverlay?: boolean;
@@ -13,7 +14,7 @@ export interface Props {
   disabled?: boolean;
   dragging?: boolean;
   handle?: boolean;
-  handleProps?: any;
+  handleProps?: HandleProps;
   height?: number;
   index?: number;
   fadeIn?: boolean;
@@ -51,17 +52,16 @@ export const Item = React.memo(
         fadeIn,
         handle,
         handleProps,
-        height,
         index,
         listeners,
         onRemove,
-        renderItem,
         sorting,
         style,
         transition,
         transform,
-        value,
         wrapperStyle,
+        renderItem,
+        value,
         ...props
       },
       ref
@@ -78,21 +78,7 @@ export const Item = React.memo(
         };
       }, [dragOverlay]);
 
-      return renderItem ? (
-        renderItem({
-          dragOverlay: Boolean(dragOverlay),
-          dragging: Boolean(dragging),
-          sorting: Boolean(sorting),
-          index,
-          fadeIn: Boolean(fadeIn),
-          listeners,
-          ref,
-          style,
-          transform,
-          transition,
-          value,
-        })
-      ) : (
+      return (
         <li
           className={clsx(
             styles.Wrapper,
@@ -139,7 +125,20 @@ export const Item = React.memo(
             {...props}
             tabIndex={!handle ? 0 : undefined}
           >
-            {value}
+            {renderItem &&
+              renderItem({
+                dragging: dragging ?? false,
+                dragOverlay: dragOverlay ?? false,
+                fadeIn: fadeIn ?? false,
+                index,
+                listeners,
+                ref,
+                sorting: sorting ?? false,
+                style,
+                transform,
+                transition,
+                value: value,
+              })}
             <span className={styles.Actions}>
               {onRemove ? (
                 <Remove className={styles.Remove} onClick={onRemove} />
