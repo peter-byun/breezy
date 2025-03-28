@@ -8,6 +8,6 @@ Backend is a private repo for security reasons.
 - next.js
 - react-query
 - redux-toolkit
-- styled-components
+- emotion(TODO: replace styled-components with emotion)
 - react-spring
 - use-gesture

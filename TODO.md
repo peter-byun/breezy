@@ -1,13 +1,16 @@
-1. Make MVP features using dummy data
+## High-Level Plans
+
+1. Build MVP features using dummy data
+2. Integrate with the backend
+
+## Use Cases
 
 - List all cards
-  - Edit card's title and content
-    - pencil icon leads to a bottom sheet
-- Can create a card
-
-  - Plus button leads to a bottom sheet
-
-- Save ordered state: mock server API
+- Create a card
+  - A plus button opens a bottom sheet
+- Edit a card's title and content
+  - A pencil icon opens a bottom sheet
+- Save the ordered state (mock server API)
 - User-curated decks
-  - use GPT
+  - Use GPT
   - Bulk insert
