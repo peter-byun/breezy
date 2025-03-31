@@ -21,14 +21,14 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Wrapper } from "@/features/dnd/components/Wrapper";
+import { Wrapper } from "@/ui-components/dnd/components/Wrapper";
 import {
   SortableItem,
   SortableProps,
-} from "@/features/dnd/components/Sortable";
-import { Item } from "@/features/dnd/components/Item";
-import { PageLayout } from "@/features/layout/PageLayout";
-import { TopNavBar } from "@/features/nav-bar/TopNavBar";
+} from "@/ui-components/dnd/components/Sortable";
+import { Item } from "@/ui-components/dnd/components/Item";
+import { PageLayout } from "@/layouts/page-layout/PageLayout";
+import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import { useCard } from "@/features/card/useCard";
 import { Card } from "@/features/card/api/type";
 

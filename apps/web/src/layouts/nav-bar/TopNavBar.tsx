@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "@emotion/styled";
 import { TopNavBarItem } from "./TopNavBarItem";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

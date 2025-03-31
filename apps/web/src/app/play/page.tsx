@@ -1,9 +1,9 @@
 "use client";
 import { CardBox, CardBoxRef } from "@/features/card/CardBox/CardBox";
 import { useCard } from "@/features/card/useCard";
-import { PageLayout } from "@/features/layout/PageLayout";
-import { TopNavBar } from "@/features/nav-bar/TopNavBar";
-import styled from "styled-components";
+import { PageLayout } from "@/layouts/page-layout/PageLayout";
+import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
+import styled from "@emotion/styled";
 
 export default function Play() {
   const { cardsToShow, memorizeCard, forgetCard, resetCards } = useCard();
