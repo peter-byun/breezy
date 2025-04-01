@@ -1,17 +1,17 @@
 "use client";
+import { HtmlLayout } from "@/layouts/HtmlLayout";
 import "./globals.css";
+
 import ReactQueryProvider from "@/layouts/library-provider/ReactQueryProvider";
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        <ReactQueryProvider>{children}</ReactQueryProvider>
-      </body>
-    </html>
+    <HtmlLayout>
+      <ReactQueryProvider>{children}</ReactQueryProvider>
+    </HtmlLayout>
   );
 }
