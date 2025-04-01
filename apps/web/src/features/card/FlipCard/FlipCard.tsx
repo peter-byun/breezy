@@ -12,25 +12,30 @@ import {
   useRef,
   useState,
 } from "react";
-import { CardBack, CardBoxRoot, CardContent, CardFront } from "./CardBoxStyle";
+import {
+  CardBack,
+  FlipCardRoot,
+  CardContent,
+  CardFront,
+} from "./FlipCardStyle";
 
-const CardBoxRootAnimated = animated(CardBoxRoot);
+const FlipCardRootAnimated = animated(FlipCardRoot);
 const CardContentAnimated = animated(CardContent);
 
-export type CardBoxRef = RefObject<HTMLDivElement | null>;
+export type FlipCardRef = RefObject<HTMLDivElement | null>;
 
-type CardBoxProps = PropsWithChildren<{
+type FlipCardProps = PropsWithChildren<{
   card: Card;
   zIndex: number;
   size?: number;
-  onSwipeLeft?: (card: Card, ref: CardBoxRef) => void;
-  onSwipeRight?: (card: Card, ref: CardBoxRef) => void;
+  onSwipeLeft?: (card: Card, ref: FlipCardRef) => void;
+  onSwipeRight?: (card: Card, ref: FlipCardRef) => void;
 }>;
 
 const ROTATION_FRONT = "rotateY(0deg)";
 const ROTATION_BACK = "rotateY(180deg)";
 
-export const CardBox = (props: CardBoxProps) => {
+export const FlipCard = (props: FlipCardProps) => {
   const { size = 300 } = props;
   const ref = useRef<HTMLDivElement>(null);
 
@@ -120,7 +125,7 @@ export const CardBox = (props: CardBoxProps) => {
   }, [hoverEffectApi]);
 
   return (
-    <CardBoxRootAnimated
+    <FlipCardRootAnimated
       ref={ref}
       key={props.card.title}
       style={{
@@ -140,6 +145,6 @@ export const CardBox = (props: CardBoxProps) => {
         <CardFront>{props.card.title}</CardFront>
         <CardBack>{props.card.content}</CardBack>
       </CardContentAnimated>
-    </CardBoxRootAnimated>
+    </FlipCardRootAnimated>
   );
 };

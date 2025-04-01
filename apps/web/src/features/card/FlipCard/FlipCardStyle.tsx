@@ -3,7 +3,7 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export const CardBoxRoot = styled.div<{
+export const FlipCardRoot = styled.div<{
   size: number;
 }>`
   position: absolute;

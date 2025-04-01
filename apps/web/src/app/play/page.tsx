@@ -1,5 +1,5 @@
 "use client";
-import { CardBox, CardBoxRef } from "@/features/card/CardBox/CardBox";
+import { FlipCard, FlipCardRef } from "@/features/card/FlipCard/FlipCard";
 import { useCard } from "@/features/card/useCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
@@ -18,7 +18,7 @@ export default function Play() {
     return 0;
   };
 
-  const hideCard = (cardRef: CardBoxRef) => {
+  const hideCard = (cardRef: FlipCardRef) => {
     return cardRef.current?.animate(
       [
         {
@@ -40,7 +40,7 @@ export default function Play() {
       <TopNavBar />
       <CardsStack>
         {cardsToShow.map((card, idx) => (
-          <CardBox
+          <FlipCard
             key={card.title}
             card={card}
             zIndex={getCardZIndex(idx)}
@@ -60,7 +60,7 @@ export default function Play() {
             }}
           >
             {card.title}
-          </CardBox>
+          </FlipCard>
         ))}
       </CardsStack>
 
