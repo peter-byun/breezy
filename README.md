@@ -12,8 +12,8 @@ Backend is a private repo for security reasons.
 - Style
   - emotion
 - Interactions
-  - react-spring
-  - use-gesture
+  - [react-spring](https://www.react-spring.dev/)
+  - [use-gesture](https://use-gesture.netlify.app/)
 - Network
   - axios
   - react-query
