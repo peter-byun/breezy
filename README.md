@@ -15,12 +15,12 @@ Backend is a private repo for security reasons.
   - react-spring
   - use-gesture
 - Network
-  - ky
+  - axios
   - react-query
 - Utility
-  - [remeda](https://github.com/remeda/remeda)
-  - https://github.com/streamich/react-use
-  - Suspense and error handling: https://github.com/toss/suspensive
+  - [remeda](https://remedajs.com/)
+  - [usehooks-ts](https://usehooks-ts.com/introduction)
+  - [Suspensive](https://suspensive.org/en/docs/react/Suspense)
 - State Management
   - Try flattening components using the composition pattern
   - Query parameters
