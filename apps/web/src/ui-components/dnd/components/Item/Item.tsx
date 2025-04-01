@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { forwardRef, memo, useEffect } from "react";
 import { clsx } from "clsx";
 import type { DraggableSyntheticListeners } from "@dnd-kit/core";
 import type { Transform } from "@dnd-kit/utilities";
@@ -41,8 +41,8 @@ export interface Props {
   }): React.ReactElement;
 }
 
-export const Item = React.memo(
-  React.forwardRef<HTMLLIElement, Props>(
+export const Item = memo(
+  forwardRef<HTMLLIElement, Props>(
     (
       {
         color,

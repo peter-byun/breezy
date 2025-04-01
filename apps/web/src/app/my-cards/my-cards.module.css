@@ -1,5 +1,5 @@
 .VirtualList {
-  > div {
+  & > div {
     overflow: hidden;
   }
 }

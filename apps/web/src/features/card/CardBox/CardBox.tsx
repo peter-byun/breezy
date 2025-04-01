@@ -1,4 +1,7 @@
+"use client";
+
 import { animated, useSpring } from "@react-spring/web";
+
 import { useDrag } from "@use-gesture/react";
 
 import { Card } from "../api/type";
@@ -10,6 +13,9 @@ import {
   useState,
 } from "react";
 import { CardBack, CardBoxRoot, CardContent, CardFront } from "./CardBoxStyle";
+
+const CardBoxRootAnimated = animated(CardBoxRoot);
+const CardContentAnimated = animated(CardContent);
 
 export type CardBoxRef = RefObject<HTMLDivElement | null>;
 
@@ -114,28 +120,26 @@ export const CardBox = (props: CardBoxProps) => {
   }, [hoverEffectApi]);
 
   return (
-    <CardBoxRoot
+    <CardBoxRootAnimated
       ref={ref}
       key={props.card.title}
-      as={animated.div}
       style={{
         x,
         y,
         scale,
         zIndex,
       }}
+      size={size}
       {...bind()}
-      $size={size}
     >
-      <CardContent
-        as={animated.div}
+      <CardContentAnimated
         style={{
           transform,
         }}
       >
         <CardFront>{props.card.title}</CardFront>
         <CardBack>{props.card.content}</CardBack>
-      </CardContent>
-    </CardBoxRoot>
+      </CardContentAnimated>
+    </CardBoxRootAnimated>
   );
 };

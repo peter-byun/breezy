@@ -1,12 +1,14 @@
+"use client";
+
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
 export const CardBoxRoot = styled.div<{
-  $size: number;
+  size: number;
 }>`
   position: absolute;
-  width: ${({ $size }) => `${$size}px`};
-  height: ${({ $size }) => `${$size}px`};
+  width: ${({ size }) => `${size}px`};
+  height: ${({ size }) => `${size}px`};
   border: 1px solid #efefef;
   border-radius: 6px;
 

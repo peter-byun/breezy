@@ -1,4 +1,4 @@
-import React, { Ref } from "react";
+import { Ref } from "react";
 import { clsx } from "clsx";
 
 import styles from "./List.module.css";

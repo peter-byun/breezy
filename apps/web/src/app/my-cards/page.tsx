@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { createPortal } from "react-dom";
 import VirtualList from "react-tiny-virtual-list";
 import styles from "./my-cards.module.css";
