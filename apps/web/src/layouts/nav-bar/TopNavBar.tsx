@@ -1,3 +1,4 @@
+"use client";
 import styled from "@emotion/styled";
 import { TopNavBarItem } from "./TopNavBarItem";
 import Link from "next/link";
