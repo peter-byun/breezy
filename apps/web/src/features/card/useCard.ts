@@ -35,6 +35,16 @@ export const useCard = () => {
     );
   };
 
+  const forgetCard = (card: Card) => {
+    const cardIdxToForget = cards.findIndex((c) => c.title === card.title);
+
+    const nextCards = [...cards];
+    nextCards.splice(cardIdxToForget, 1);
+    nextCards.push(card);
+
+    setCards(nextCards);
+  };
+
   const deleteCard = (id: Card["id"]) => {
     const cardIdxToForget = cards.findIndex((c) => c.id === id);
     console.log(cardIdxToForget);
@@ -52,8 +62,9 @@ export const useCard = () => {
   return {
     cards,
     setCards,
-    createCard,
     memorizeCard,
+    forgetCard,
+    createCard,
     deleteCard,
     resetCards,
   };
