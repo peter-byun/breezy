@@ -5,6 +5,5 @@
 
 ## Use Cases
 
-- Rename Manageable Cards
 - Delete cards
 - Mock API server implementation

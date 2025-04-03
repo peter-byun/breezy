@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import VirtualList from "react-tiny-virtual-list";
-import styles from "./manageable-card-list.module.css";
+import styles from "./draggable-action-card-list.module.css";
 
 import {
   closestCenter,
@@ -44,7 +44,7 @@ const DRAG_ABORT_MOVEMENT_PX = 10;
 const adjustScale = false;
 const strategy = verticalListSortingStrategy;
 
-export const ManageableCardList = ({
+export const DraggableActionCardList = ({
   cards,
   onCardsReorder,
   onEditClick,
@@ -149,6 +149,7 @@ export const ManageableCardList = ({
                 wrapperStyle={{
                   padding: 5,
                 }}
+                dragOverlay
               />
             ) : null}
           </DragOverlay>,

@@ -2,7 +2,7 @@
 
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
-import { ManageableCardList } from "./components/ManageableCardList/ManageableCardList";
+import { DraggableActionCardList } from "./components/DraggableActionCardList/DraggableActionCardList";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
 import { useOverlay } from "@toss/use-overlay";
@@ -59,7 +59,7 @@ export default function MyCards() {
     <PageLayout>
       <TopNavBar />
       <AddCardButton onClick={handleAddCardClick} />
-      <ManageableCardList
+      <DraggableActionCardList
         cards={cards}
         onCardsReorder={handleCardsReorder}
         onEditClick={handleEditClick}
