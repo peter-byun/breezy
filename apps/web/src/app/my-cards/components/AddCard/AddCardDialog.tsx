@@ -1,9 +1,9 @@
 import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
-import { AddCardButton } from "./AddCardButton";
 import { useAppForm } from "@/ui-components/form/useAppForm";
 
 import { z } from "zod";
 import { useState } from "react";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 type SavedCard = {
   title: string;
@@ -39,7 +39,10 @@ export const AddCardDialog = ({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
-        <AddCardButton />
+        <Button>
+          <PlusIcon width="18" height="18" />
+          Add Card
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <form
