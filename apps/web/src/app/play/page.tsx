@@ -4,9 +4,15 @@ import { useCard } from "@/features/card/useCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import styled from "@emotion/styled";
+import { useEffect, useState } from "react";
+import { filterMemorizedCards } from "@/features/card/helpers/filterMemorizedCards";
 
 export default function Play() {
-  const { cardsToShow, memorizeCard, forgetCard, resetCards } = useCard();
+  const { cards, memorizeCard, forgetCard, resetCards } = useCard();
+  const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
+  useEffect(() => {
+    setCardsToShow(filterMemorizedCards(cards));
+  }, [cards]);
 
   const getCardZIndex = (idx: number) => {
     if (idx === 0) {
