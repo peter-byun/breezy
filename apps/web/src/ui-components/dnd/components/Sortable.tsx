@@ -38,7 +38,6 @@ export interface SortableProps {
   coordinateGetter?: KeyboardCoordinateGetter;
   dropAnimation?: DropAnimation | null;
   getNewIndex?: NewIndexGetter;
-  handle?: boolean;
   itemCount?: number;
   items?: UniqueIdentifier[];
   measuring?: MeasuringConfiguration;
@@ -47,7 +46,6 @@ export interface SortableProps {
   reorderItems?: typeof arrayMove;
   strategy?: SortingStrategy;
   style?: React.CSSProperties;
-  useDragOverlay?: boolean;
   getItemStyles?: GetItemStyles;
   wrapperStyle?(args: {
     active: Pick<Active, "id"> | null;
@@ -64,10 +62,7 @@ interface SortableItemProps {
   getNewIndex?: NewIndexGetter;
   id: UniqueIdentifier;
   index: number;
-  handle: boolean;
-  useDragOverlay?: boolean;
   onRemove?(id: UniqueIdentifier): void;
-  style: GetItemStyles;
   renderItem?(): React.ReactElement;
   wrapperStyle: SortableProps["wrapperStyle"];
 }
@@ -78,9 +73,7 @@ export function SortableItem({
   getNewIndex,
   id,
   index,
-  style,
   renderItem,
-  useDragOverlay,
   wrapperStyle,
 }: SortableItemProps) {
   const {
@@ -89,7 +82,6 @@ export function SortableItem({
     isDragging,
     isSorting,
     listeners,
-    overIndex,
     setNodeRef,
     transform,
     transition,
@@ -109,20 +101,12 @@ export function SortableItem({
       sorting={isSorting}
       renderItem={renderItem}
       index={index}
-      style={style({
-        index,
-        id,
-        isDragging,
-        isSorting,
-        overIndex,
-      })}
       transform={transform}
       transition={transition}
       wrapperStyle={wrapperStyle?.({ index, isDragging, active, id })}
       listeners={listeners}
       data-index={index}
       data-id={id}
-      dragOverlay={!useDragOverlay && isDragging}
       {...attributes}
     />
   );
