@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { MouseEventHandler, PropsWithChildren, useState } from "react";
 import { createPortal } from "react-dom";
 import VirtualList from "react-tiny-virtual-list";
 import styles from "./manageable-card-list.module.css";
@@ -28,19 +28,20 @@ import {
 } from "@/ui-components/dnd/components/Sortable";
 import { Item } from "@/ui-components/dnd/components/Item";
 import { useCard } from "@/features/card/useCard";
+import { Flex, IconButton, Text } from "@radix-ui/themes";
+import { TrashIcon } from "@radix-ui/react-icons";
 import { Card } from "@/features/card/api/type";
+import { css } from "@emotion/react";
 
-const filterMemorizedCards = (cards: Card[]) =>
-  cards.filter((card) => !card.memorized);
+interface Props {
+  // onEditCardClick: (id: CardId) => void;
+  onDeleteCardClick: (id: CardId) => void;
+}
+type CardId = Card["id"];
 
-export const ManageableCardList = () => {
-  const { cards } = useCard();
+export const ManageableCardList = (props: Props) => {
+  const { cards, setCards } = useCard();
   // TODO: update origin cards data when cards are sorted
-
-  const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
-  useEffect(() => {
-    setCardsToShow(filterMemorizedCards(cards));
-  }, [cards]);
 
   const {
     adjustScale = false,
@@ -52,13 +53,15 @@ export const ManageableCardList = () => {
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: { delay: 120, tolerance: 10 },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
   const getIndex = (id: UniqueIdentifier) =>
-    cardsToShow.findIndex((card) => card.id === id);
+    cards.findIndex((card) => card.id === id);
   const activeIndex = activeId != null ? getIndex(activeId) : -1;
 
   return (
@@ -72,7 +75,7 @@ export const ManageableCardList = () => {
         if (over) {
           const overIndex = getIndex(over.id);
           if (activeIndex !== overIndex) {
-            setCardsToShow((items) => arrayMove(items, activeIndex, overIndex));
+            setCards((items) => arrayMove(items, activeIndex, overIndex));
           }
         }
 
@@ -82,19 +85,19 @@ export const ManageableCardList = () => {
       modifiers={modifiers}
     >
       <Wrapper center={true}>
-        <SortableContext items={cardsToShow} strategy={strategy}>
+        <SortableContext items={cards} strategy={strategy}>
           <VirtualList
-            width={300}
+            width={500}
             height={800}
-            itemCount={cardsToShow.length}
+            itemCount={cards.length}
             itemSize={64}
             stickyIndices={
               activeId != null
-                ? [cardsToShow.findIndex((card) => card.id === activeId)]
+                ? [cards.findIndex((card) => card.id === activeId)]
                 : undefined
             }
             renderItem={({ index, style }) => {
-              const id = cardsToShow[index].id;
+              const id = cards[index].id;
 
               return (
                 <SortableItem
@@ -108,7 +111,20 @@ export const ManageableCardList = () => {
                   })}
                   style={getItemStyles}
                   useDragOverlay
-                  renderItem={() => <>{cardsToShow[index]?.title}</>}
+                  renderItem={() => (
+                    <ItemLayout>
+                      <Text>{cards[index]?.title}</Text>
+                      <Flex direction={"row"} gap={"5px"}>
+                        {/* <EditCardButton onClick={props.onEditCardClick(id)} /> */}
+                        <DeleteCardButton
+                          onClick={() => {
+                            console.log(id);
+                            props.onDeleteCardClick(id);
+                          }}
+                        />
+                      </Flex>
+                    </ItemLayout>
+                  )}
                 />
               );
             }}
@@ -121,8 +137,7 @@ export const ManageableCardList = () => {
           <DragOverlay adjustScale={adjustScale}>
             {activeId != null ? (
               <Item
-                value={cardsToShow[activeIndex].content}
-                handle={handle}
+                value={cards[activeIndex].content}
                 style={getItemStyles({
                   id: activeId,
                   index: activeIndex,
@@ -135,12 +150,68 @@ export const ManageableCardList = () => {
                   padding: 5,
                 }}
                 dragOverlay
-                renderItem={() => <>{cardsToShow[activeIndex]?.title}</>}
+                renderItem={() => (
+                  <ItemLayout>
+                    <Text>{cards[activeIndex]?.title}</Text>
+                  </ItemLayout>
+                )}
               />
             ) : null}
           </DragOverlay>,
           document.body
         )}
     </DndContext>
+  );
+};
+
+const ItemLayout = ({ children }: PropsWithChildren) => (
+  <Flex width={"100%"} direction={"row"} justify={"between"}>
+    {children}
+  </Flex>
+);
+
+// const EditCardButton = ({
+//   onClick,
+// }: {
+//   onClick?: MouseEventHandler<HTMLButtonElement>;
+// }) => {
+//   return (
+//     <IconButton
+//       onClick={onClick}
+//       color="blue"
+//       variant="outline"
+//       css={css`
+//         cursor: pointer;
+//       `}
+//     >
+//       <Pencil1Icon width="18" height="18" color="blue" />
+//     </IconButton>
+//   );
+// };
+
+const DeleteCardButton = ({
+  onClick,
+}: {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+}) => {
+  return (
+    <IconButton
+      onClick={(e) => {
+        console.log("click");
+        e.stopPropagation();
+        onClick?.(e);
+      }}
+      color="red"
+      variant="outline"
+      onMouseOver={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      css={css`
+        cursor: pointer;
+      `}
+    >
+      <TrashIcon width="18" height="18" color="red" />
+    </IconButton>
   );
 };
