@@ -5,12 +5,7 @@
 
 ## Use Cases
 
-- List all cards
-- Create a card
-  - A plus button opens a bottom sheet
 - Edit a card's title and content
-  - A pencil icon opens a bottom sheet
+  - A pencil icon
+- Delete cards
 - Save the ordered state (mock server API)
-- User-curated decks
-  - Use GPT
-  - Bulk insert

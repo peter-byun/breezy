@@ -7,13 +7,11 @@ import { AddCardRoot } from "./components/AddCard/AddCardRoot";
 import { useCard } from "@/features/card/useCard";
 
 export default function MyCards() {
-  const { deleteCard } = useCard();
-
   return (
     <PageLayout>
       <TopNavBar />
       <AddCardRoot />
-      <ManageableCardList onDeleteCardClick={deleteCard} />
+      <ManageableCardList />
     </PageLayout>
   );
 }

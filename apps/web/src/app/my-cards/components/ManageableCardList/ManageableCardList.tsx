@@ -30,17 +30,10 @@ import { Item } from "@/ui-components/dnd/components/Item";
 import { useCard } from "@/features/card/useCard";
 import { Flex, IconButton, Text } from "@radix-ui/themes";
 import { TrashIcon } from "@radix-ui/react-icons";
-import { Card } from "@/features/card/api/type";
 import { css } from "@emotion/react";
 
-interface Props {
-  // onEditCardClick: (id: CardId) => void;
-  onDeleteCardClick: (id: CardId) => void;
-}
-type CardId = Card["id"];
-
-export const ManageableCardList = (props: Props) => {
-  const { cards, setCards } = useCard();
+export const ManageableCardList = () => {
+  const { cards, setCards, deleteCard } = useCard();
   // TODO: update origin cards data when cards are sorted
 
   const {
@@ -118,8 +111,7 @@ export const ManageableCardList = (props: Props) => {
                         {/* <EditCardButton onClick={props.onEditCardClick(id)} /> */}
                         <DeleteCardButton
                           onClick={() => {
-                            console.log(id);
-                            props.onDeleteCardClick(id);
+                            deleteCard(id);
                           }}
                         />
                       </Flex>
