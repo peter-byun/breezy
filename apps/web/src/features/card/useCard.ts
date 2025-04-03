@@ -35,12 +35,12 @@ export const useCard = () => {
     );
   };
 
-  const forgetCard = (card: Card) => {
-    const cardIdxToForget = cards.findIndex((c) => c.title === card.title);
+  const deleteCard = (id: Card["id"]) => {
+    const cardIdxToForget = cards.findIndex((c) => c.id === id);
+    console.log(cardIdxToForget);
 
     const nextCards = [...cards];
     nextCards.splice(cardIdxToForget, 1);
-    nextCards.push(card);
 
     setCards(nextCards);
   };
@@ -54,7 +54,7 @@ export const useCard = () => {
     setCards,
     createCard,
     memorizeCard,
-    forgetCard,
+    deleteCard,
     resetCards,
   };
 };
