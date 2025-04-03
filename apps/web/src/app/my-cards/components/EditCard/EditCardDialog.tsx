@@ -5,9 +5,9 @@ import { cardSchema } from "@/features/card/validation/cardSchema";
 import { DialogProps } from "@/ui-components/dialog/dialogType";
 
 interface Props extends DialogProps {
-  onSubmit: (card: SavedCard) => void;
+  onSubmit: (card: UpdatedCard) => void;
 }
-type SavedCard = {
+type UpdatedCard = {
   title: string;
   content: string;
 };

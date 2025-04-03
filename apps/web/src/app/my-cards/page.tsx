@@ -3,22 +3,40 @@
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import { ManageableCardList } from "./components/ManageableCardList/ManageableCardList";
-import { AddCardRoot } from "./components/AddCard/AddCardRoot";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
 import { useOverlay } from "@toss/use-overlay";
 import { Card } from "@/features/card/api/type";
+import { AddCardButton } from "./components/AddCard/AddCardButton";
+import { AddCardDialog } from "./components/AddCard/AddCardDialog";
 
 export default function MyCards() {
-  const { cards, setCards, editCard, deleteCard } = useCard();
+  const { cards, setCards, createCard, editCard, deleteCard } = useCard();
 
   const handleCardsReorder = (cards: Card[]) => {
     setCards(cards);
   };
 
-  const overlay = useOverlay();
+  const addCardOverlay = useOverlay();
+  const handleAddCardClick = () => {
+    addCardOverlay.open(({ isOpen, close }) => (
+      <AddCardDialog
+        open={isOpen}
+        setOpen={(nextOpen) => {
+          if (!nextOpen) {
+            close();
+          }
+        }}
+        onSubmit={(card) => {
+          createCard(card);
+        }}
+      />
+    ));
+  };
+
+  const editCardOverlay = useOverlay();
   const handleEditClick = (cardId: string) => {
-    overlay.open(({ isOpen, close }) => (
+    editCardOverlay.open(({ isOpen, close }) => (
       <EditCardDialog
         open={isOpen}
         setOpen={(nextOpen) => {
@@ -40,7 +58,7 @@ export default function MyCards() {
   return (
     <PageLayout>
       <TopNavBar />
-      <AddCardRoot />
+      <AddCardButton onClick={handleAddCardClick} />
       <ManageableCardList
         cards={cards}
         onCardsReorder={handleCardsReorder}

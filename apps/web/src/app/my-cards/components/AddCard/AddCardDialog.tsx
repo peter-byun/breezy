@@ -1,22 +1,18 @@
 import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { useAppForm } from "@/ui-components/form/useAppForm";
 
-import { useState } from "react";
-import { PlusIcon } from "@radix-ui/react-icons";
 import { cardSchema } from "@/features/card/validation/cardSchema";
+import { DialogProps } from "@/ui-components/dialog/dialogType";
 
+interface Props extends DialogProps {
+  onSubmit: (card: SavedCard) => void;
+}
 type SavedCard = {
   title: string;
   content: string;
 };
 
-export const AddCardDialog = ({
-  onSubmit,
-}: {
-  onSubmit: (card: SavedCard) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-
+export const AddCardDialog = ({ open, setOpen, onSubmit }: Props) => {
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -35,12 +31,6 @@ export const AddCardDialog = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <Button>
-          <PlusIcon width="18" height="18" />
-          Add Card
-        </Button>
-      </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <form
           onSubmit={(e) => {
