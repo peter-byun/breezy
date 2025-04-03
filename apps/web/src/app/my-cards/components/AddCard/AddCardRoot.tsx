@@ -8,6 +8,6 @@ export const AddCardRoot = () => {
       onSubmit={(card) => {
         createCard(card);
       }}
-    ></AddCardDialog>
+    />
   );
 };
