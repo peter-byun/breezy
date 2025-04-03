@@ -5,5 +5,5 @@
 
 ## Use Cases
 
-- Delete cards
+- Toggle memorized state of cards
 - Mock API server implementation
