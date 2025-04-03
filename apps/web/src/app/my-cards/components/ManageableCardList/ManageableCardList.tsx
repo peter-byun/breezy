@@ -31,9 +31,10 @@ import { useCard } from "@/features/card/useCard";
 import { Flex, IconButton, Text } from "@radix-ui/themes";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { css } from "@emotion/react";
+import { EditCardDialog } from "../EditCard/EditCardDialog";
 
 export const ManageableCardList = () => {
-  const { cards, setCards, deleteCard } = useCard();
+  const { cards, setCards, editCard, deleteCard } = useCard();
   // TODO: update origin cards data when cards are sorted
 
   const {
@@ -47,7 +48,7 @@ export const ManageableCardList = () => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { delay: 120, tolerance: 10 },
+      activationConstraint: { delay: 100, tolerance: 10 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -108,7 +109,11 @@ export const ManageableCardList = () => {
                     <ItemLayout>
                       <Text>{cards[index]?.title}</Text>
                       <Flex direction={"row"} gap={"5px"}>
-                        {/* <EditCardButton onClick={props.onEditCardClick(id)} /> */}
+                        <EditCardDialog
+                          onSubmit={(card) => {
+                            editCard(id, card);
+                          }}
+                        />
                         <DeleteCardButton
                           onClick={() => {
                             deleteCard(id);
@@ -161,26 +166,6 @@ const ItemLayout = ({ children }: PropsWithChildren) => (
     {children}
   </Flex>
 );
-
-// const EditCardButton = ({
-//   onClick,
-// }: {
-//   onClick?: MouseEventHandler<HTMLButtonElement>;
-// }) => {
-//   return (
-//     <IconButton
-//       onClick={onClick}
-//       color="blue"
-//       variant="outline"
-//       css={css`
-//         cursor: pointer;
-//       `}
-//     >
-//       <Pencil1Icon width="18" height="18" color="blue" />
-//     </IconButton>
-//   );
-// };
-
 const DeleteCardButton = ({
   onClick,
 }: {

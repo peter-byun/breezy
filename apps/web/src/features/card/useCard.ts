@@ -3,6 +3,8 @@ import { Card } from "./api/type";
 import { cardsAtom } from "./atom/cardsAtom";
 import { useAtom } from "jotai";
 
+type CardId = Card["id"];
+
 export const useCard = () => {
   // TODO: Fetch it from the backend
 
@@ -45,9 +47,23 @@ export const useCard = () => {
     setCards(nextCards);
   };
 
-  const deleteCard = (id: Card["id"]) => {
+  const editCard = (id: CardId, card: Pick<Card, "title" | "content">) => {
+    const cardIdxToEdit = cards.findIndex((c) => c.id === id);
+
+    const cardToEdit: Card = {
+      ...cards[cardIdxToEdit],
+      title: card.title,
+      content: card.content,
+    };
+
+    const nextCards = [...cards];
+    nextCards.splice(cardIdxToEdit, 1, cardToEdit);
+
+    setCards(nextCards);
+  };
+
+  const deleteCard = (id: CardId) => {
     const cardIdxToForget = cards.findIndex((c) => c.id === id);
-    console.log(cardIdxToForget);
 
     const nextCards = [...cards];
     nextCards.splice(cardIdxToForget, 1);
@@ -65,6 +81,7 @@ export const useCard = () => {
     memorizeCard,
     forgetCard,
     createCard,
+    editCard,
     deleteCard,
     resetCards,
   };
