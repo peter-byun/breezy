@@ -76,10 +76,8 @@ export function SortableItem({
   disabled,
   animateLayoutChanges,
   getNewIndex,
-  handle,
   id,
   index,
-  onRemove,
   style,
   renderItem,
   useDragOverlay,
@@ -93,7 +91,6 @@ export function SortableItem({
     listeners,
     overIndex,
     setNodeRef,
-    setActivatorNodeRef,
     transform,
     transition,
   } = useSortable({
@@ -110,14 +107,6 @@ export function SortableItem({
       disabled={disabled}
       dragging={isDragging}
       sorting={isSorting}
-      handle={handle}
-      handleProps={
-        handle
-          ? {
-              ref: setActivatorNodeRef,
-            }
-          : undefined
-      }
       renderItem={renderItem}
       index={index}
       style={style({
@@ -127,7 +116,6 @@ export function SortableItem({
         isSorting,
         overIndex,
       })}
-      onRemove={onRemove ? () => onRemove(id) : undefined}
       transform={transform}
       transition={transition}
       wrapperStyle={wrapperStyle?.({ index, isDragging, active, id })}

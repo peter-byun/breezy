@@ -3,18 +3,13 @@ import { clsx } from "clsx";
 import type { DraggableSyntheticListeners } from "@dnd-kit/core";
 import type { Transform } from "@dnd-kit/utilities";
 
-import { Handle, Remove } from "./components";
-
 import styles from "./Item.module.css";
-import { HandleProps } from "./components/Handle/Handle";
 
 export interface Props {
   dragOverlay?: boolean;
   color?: string;
   disabled?: boolean;
   dragging?: boolean;
-  handle?: boolean;
-  handleProps?: HandleProps;
   height?: number;
   index?: number;
   fadeIn?: boolean;
@@ -25,7 +20,6 @@ export interface Props {
   transition?: string | null;
   wrapperStyle?: React.CSSProperties;
   value: React.ReactNode;
-  onRemove?(): void;
   renderItem?(args: {
     dragOverlay: boolean;
     dragging: boolean;
@@ -50,11 +44,8 @@ export const Item = memo(
         dragging,
         disabled,
         fadeIn,
-        handle,
-        handleProps,
         index,
         listeners,
-        onRemove,
         sorting,
         style,
         transition,
@@ -114,37 +105,29 @@ export const Item = memo(
             className={clsx(
               styles.Item,
               dragging && styles.dragging,
-              handle && styles.withHandle,
               dragOverlay && styles.dragOverlay,
               disabled && styles.disabled,
               color && styles.color
             )}
             style={style}
             data-cypress="draggable-item"
-            {...(!handle ? listeners : undefined)}
+            {...listeners}
             {...props}
-            tabIndex={!handle ? 0 : undefined}
+            tabIndex={0}
           >
-            {renderItem &&
-              renderItem({
-                dragging: dragging ?? false,
-                dragOverlay: dragOverlay ?? false,
-                fadeIn: fadeIn ?? false,
-                index,
-                listeners,
-                ref,
-                sorting: sorting ?? false,
-                style,
-                transform,
-                transition,
-                value: value,
-              })}
-            <span className={styles.Actions}>
-              {onRemove ? (
-                <Remove className={styles.Remove} onClick={onRemove} />
-              ) : null}
-              {handle ? <Handle {...handleProps} {...listeners} /> : null}
-            </span>
+            {renderItem?.({
+              dragging: dragging ?? false,
+              dragOverlay: dragOverlay ?? false,
+              fadeIn: fadeIn ?? false,
+              index,
+              listeners,
+              ref,
+              sorting: sorting ?? false,
+              style,
+              transform,
+              transition,
+              value: value,
+            })}
           </div>
         </li>
       );
