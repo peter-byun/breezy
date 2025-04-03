@@ -7,9 +7,14 @@ import { AddCardRoot } from "./components/AddCard/AddCardRoot";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
 import { useOverlay } from "@toss/use-overlay";
+import { Card } from "@/features/card/api/type";
 
 export default function MyCards() {
-  const { editCard } = useCard();
+  const { cards, setCards, editCard, deleteCard } = useCard();
+
+  const handleCardsReorder = (cards: Card[]) => {
+    setCards(cards);
+  };
 
   const overlay = useOverlay();
   const handleEditClick = (cardId: string) => {
@@ -28,13 +33,20 @@ export default function MyCards() {
     ));
   };
 
+  const handleDeleteClick = (cardId: string) => {
+    deleteCard(cardId);
+  };
+
   return (
     <PageLayout>
       <TopNavBar />
       <AddCardRoot />
-      {/* TODO: handle CRUD operations here, with event handlers. to transparently
-      show the logic, modals should be controlled by useOverlay hooks. */}
-      <ManageableCardList onEditClick={handleEditClick} />
+      <ManageableCardList
+        cards={cards}
+        onCardsReorder={handleCardsReorder}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDeleteClick}
+      />
     </PageLayout>
   );
 }

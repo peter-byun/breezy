@@ -24,15 +24,19 @@ import {
 import { Wrapper } from "@/ui-components/dnd/components/Wrapper";
 import { SortableItem } from "@/ui-components/dnd/components/Sortable";
 import { Item } from "@/ui-components/dnd/components/Item";
-import { useCard } from "@/features/card/useCard";
+
 import { Flex, Text } from "@radix-ui/themes";
 
 import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
 import { EditCardButton } from "../EditCard/EditCardButton";
+import { Card } from "@/features/card/api/type";
 
 interface Props {
+  cards: Card[];
+  onCardsReorder: (cards: Card[]) => void;
   onEditClick: (cardId: string) => void;
+  onDeleteClick: (cardId: string) => void;
 }
 
 const DRAG_TRIGGER_MOUSEDOWN_MS = 100;
@@ -40,9 +44,12 @@ const DRAG_ABORT_MOVEMENT_PX = 10;
 const adjustScale = false;
 const strategy = verticalListSortingStrategy;
 
-export const ManageableCardList = ({ onEditClick }: Props) => {
-  const { cards, setCards, deleteCard } = useCard();
-
+export const ManageableCardList = ({
+  cards,
+  onCardsReorder,
+  onEditClick,
+  onDeleteClick,
+}: Props) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -77,7 +84,7 @@ export const ManageableCardList = ({ onEditClick }: Props) => {
         if (over) {
           const overIndex = getIndex(over.id);
           if (activeItemIndex !== overIndex) {
-            setCards((items) => arrayMove(items, activeItemIndex, overIndex));
+            onCardsReorder(arrayMove(cards, activeItemIndex, overIndex));
           }
         }
         setActiveId(null);
@@ -108,7 +115,7 @@ export const ManageableCardList = ({ onEditClick }: Props) => {
                         />
                         <DeleteCardButton
                           onClick={() => {
-                            deleteCard(id);
+                            onDeleteClick(id);
                           }}
                         />
                       </Flex>
