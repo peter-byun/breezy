@@ -7,5 +7,8 @@
 
 - Edit a card's title and content
   - A pencil icon
+- Refactor
+  - using useOverlay, make actions explicit
+  - ManageableCardList could be slimmed down by separating concerns.
 - Delete cards
 - Save the ordered state (mock server API)
