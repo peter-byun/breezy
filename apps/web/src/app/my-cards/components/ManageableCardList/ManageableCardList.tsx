@@ -26,18 +26,22 @@ import { SortableItem } from "@/ui-components/dnd/components/Sortable";
 import { Item } from "@/ui-components/dnd/components/Item";
 import { useCard } from "@/features/card/useCard";
 import { Flex, Text } from "@radix-ui/themes";
-import { EditCardDialog } from "../EditCard/EditCardDialog";
+
 import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
+import { EditCardButton } from "../EditCard/EditCardButton";
 
-const adjustScale = false;
-const strategy = verticalListSortingStrategy;
+interface Props {
+  onEditClick: (cardId: string) => void;
+}
 
 const DRAG_TRIGGER_MOUSEDOWN_MS = 100;
 const DRAG_ABORT_MOVEMENT_PX = 10;
+const adjustScale = false;
+const strategy = verticalListSortingStrategy;
 
-export const ManageableCardList = () => {
-  const { cards, setCards, editCard, deleteCard } = useCard();
+export const ManageableCardList = ({ onEditClick }: Props) => {
+  const { cards, setCards, deleteCard } = useCard();
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
@@ -97,9 +101,9 @@ export const ManageableCardList = () => {
                       <Text>{cards[index]?.title}</Text>
                       <Flex direction={"row"} gap={"5px"}>
                         {/* TODO: Replace these with simple buttons with click handlers, and pass the events up to the root. */}
-                        <EditCardDialog
-                          onSubmit={(card) => {
-                            editCard(id, card);
+                        <EditCardButton
+                          onClick={() => {
+                            onEditClick(id);
                           }}
                         />
                         <DeleteCardButton

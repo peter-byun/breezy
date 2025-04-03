@@ -1,23 +1,18 @@
-import { Button, Dialog, Flex, IconButton, Text } from "@radix-ui/themes";
+import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { useAppForm } from "@/ui-components/form/useAppForm";
 
-import { useState } from "react";
-import { Pencil1Icon } from "@radix-ui/react-icons";
 import { cardSchema } from "@/features/card/validation/cardSchema";
-import { css } from "@emotion/react";
+import { DialogProps } from "@/ui-components/dialog/dialogType";
 
+interface Props extends DialogProps {
+  onSubmit: (card: SavedCard) => void;
+}
 type SavedCard = {
   title: string;
   content: string;
 };
 
-export const EditCardDialog = ({
-  onSubmit,
-}: {
-  onSubmit: (card: SavedCard) => void;
-}) => {
-  const [open, setOpen] = useState(false);
-
+export const EditCardDialog = ({ open, setOpen, onSubmit }: Props) => {
   const form = useAppForm({
     defaultValues: {
       title: "",
@@ -36,17 +31,6 @@ export const EditCardDialog = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger>
-        <IconButton
-          color="blue"
-          variant="outline"
-          css={css`
-            cursor: pointer;
-          `}
-        >
-          <Pencil1Icon width="18" height="18" color="blue" />
-        </IconButton>
-      </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <form
           onSubmit={(e) => {
