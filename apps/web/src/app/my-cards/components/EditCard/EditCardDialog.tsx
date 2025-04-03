@@ -1,16 +1,17 @@
-import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
+import { Button, Dialog, Flex, IconButton, Text } from "@radix-ui/themes";
 import { useAppForm } from "@/ui-components/form/useAppForm";
 
 import { useState } from "react";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon } from "@radix-ui/react-icons";
 import { cardSchema } from "@/features/card/validation/cardSchema";
+import { css } from "@emotion/react";
 
 type SavedCard = {
   title: string;
   content: string;
 };
 
-export const AddCardDialog = ({
+export const EditCardDialog = ({
   onSubmit,
 }: {
   onSubmit: (card: SavedCard) => void;
@@ -36,10 +37,15 @@ export const AddCardDialog = ({
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger>
-        <Button>
-          <PlusIcon width="18" height="18" />
-          Add Card
-        </Button>
+        <IconButton
+          color="blue"
+          variant="outline"
+          css={css`
+            cursor: pointer;
+          `}
+        >
+          <Pencil1Icon width="18" height="18" color="blue" />
+        </IconButton>
       </Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
         <form
@@ -48,9 +54,9 @@ export const AddCardDialog = ({
             form.handleSubmit();
           }}
         >
-          <Dialog.Title>Add Card</Dialog.Title>
+          <Dialog.Title>Edit Card</Dialog.Title>
           <Dialog.Description size="2" mb="4">
-            Add a card to memorize.
+            Update the title or content.
           </Dialog.Description>
 
           <Flex direction="column" gap="3">
