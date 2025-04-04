@@ -7,3 +7,4 @@
 
 - Toggle memorized state of cards
 - Mock API server implementation
+- Onboarding experience
