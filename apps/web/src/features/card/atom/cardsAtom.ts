@@ -17,6 +17,6 @@ type CardAtom = {
   memorizedAt: number;
 };
 
-export const cardsAtom = atom<CardAtom[]>(
-  dummyCards.sort((a, b) => a.order - b.order)
-);
+export const initialCards = dummyCards.sort((a, b) => a.order - b.order);
+
+export const cardsAtom = atom<CardAtom[]>(initialCards);

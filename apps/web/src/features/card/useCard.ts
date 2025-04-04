@@ -1,6 +1,6 @@
 import { Card } from "./api/type";
 
-import { cardsAtom } from "./atom/cardsAtom";
+import { cardsAtom, initialCards } from "./atom/cardsAtom";
 import { useAtom } from "jotai";
 
 type CardId = Card["id"];
@@ -72,7 +72,7 @@ export const useCard = () => {
   };
 
   const resetCards = () => {
-    setCards([]);
+    setCards([...initialCards]);
   };
 
   return {

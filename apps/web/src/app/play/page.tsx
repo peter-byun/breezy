@@ -6,6 +6,8 @@ import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { filterMemorizedCards } from "@/features/card/helpers/filterMemorizedCards";
+import { Button } from "@radix-ui/themes";
+import { css } from "@emotion/react";
 
 export default function Play() {
   const { cards, memorizeCard, forgetCard, resetCards } = useCard();
@@ -72,9 +74,15 @@ export default function Play() {
 
       <Progress>
         {cardsToShow.length === 0 ? (
-          <button onClick={resetCards}>
-            <h2>🎉 Congrats! Wanna start over?</h2>
-          </button>
+          <Button
+            onClick={resetCards}
+            css={css`
+              padding: 20px;
+              font-size: 20px;
+            `}
+          >
+            🎉 Congrats! Wanna start over?
+          </Button>
         ) : (
           <h2>{cardsToShow.length} Cards left</h2>
         )}
