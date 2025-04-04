@@ -10,7 +10,7 @@ import { Button } from "@radix-ui/themes";
 import { css } from "@emotion/react";
 
 export default function Play() {
-  const { cards, memorizeCard, forgetCard, resetCards } = useCard();
+  const { cards, memorizeCard, moveCardToBottom, resetCards } = useCard();
   const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
   useEffect(() => {
     setCardsToShow(filterMemorizedCards(cards));
@@ -56,15 +56,12 @@ export default function Play() {
               hideCard(ref)?.then(() => {
                 if (ref.current?.style) {
                   ref.current.style.opacity = "0";
-                  memorizeCard(card);
+                  memorizeCard(card.id);
                 }
               });
             }}
             onSwipeRight={(card) => {
-              forgetCard(card);
-              if (cardsToShow.length === 1) {
-                // TODO: Toast - One last card left!💪
-              }
+              moveCardToBottom(card.id);
             }}
           >
             {card.title}
