@@ -5,7 +5,6 @@
 
 ## Use Cases
 
-- Toggle memorized state of cards
 - Error handling
   - for features
   - and pages
