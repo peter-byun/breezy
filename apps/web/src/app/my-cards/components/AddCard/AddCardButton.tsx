@@ -6,7 +6,7 @@ export const AddCardButton = ({ onClick }: ButtonProps) => {
   return (
     <Button onClick={onClick}>
       <PlusIcon width="18" height="18" />
-      Add Card
+      Add a Card
     </Button>
   );
 };
