@@ -1,9 +1,7 @@
-import { Card } from "./api/type";
+import { Card, CardId } from "./api/type";
 
 import { cardsAtom, initialCards } from "./atom/cardsAtom";
 import { useAtom } from "jotai";
-
-type CardId = Card["id"];
 
 export const useCard = () => {
   // TODO: Fetch it from the backend
@@ -16,7 +14,7 @@ export const useCard = () => {
       id: String(cards.length + 1),
       memorized: false,
       createdAt: Date.now() - 1000 * 60 * 60 * 2,
-      memorizedAt: 0,
+      memorizedAt: null,
     };
 
     const newCard: Card = {
@@ -27,21 +25,29 @@ export const useCard = () => {
     setCards([...cards, newCard]);
   };
 
-  const memorizeCard = (card: Card) => {
+  const memorizeCard = (id: CardId) => {
     setCards(
-      cards.map((temp) =>
-        temp.title === card.title
-          ? { ...temp, memorized: true, memorizedAt: Date.now() }
-          : temp
+      cards.map((card) =>
+        card.id === id
+          ? { ...card, memorized: true, memorizedAt: Date.now() }
+          : card
+      )
+    );
+  };
+  const forgetCard = (id: CardId) => {
+    setCards(
+      cards.map((card) =>
+        card.id === id ? { ...card, memorized: false, memorizedAt: null } : card
       )
     );
   };
 
-  const forgetCard = (card: Card) => {
-    const cardIdxToForget = cards.findIndex((c) => c.title === card.title);
+  const moveCardToBottom = (id: CardId) => {
+    const cardIdxToMove = cards.findIndex((c) => c.id === id);
+    const card = cards[cardIdxToMove];
 
     const nextCards = [...cards];
-    nextCards.splice(cardIdxToForget, 1);
+    nextCards.splice(cardIdxToMove, 1);
     nextCards.push(card);
 
     setCards(nextCards);
@@ -80,6 +86,7 @@ export const useCard = () => {
     setCards,
     memorizeCard,
     forgetCard,
+    moveCardToBottom,
     createCard,
     editCard,
     deleteCard,

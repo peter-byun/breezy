@@ -14,7 +14,7 @@ type CardAtom = {
   /**
    * In MS
    */
-  memorizedAt: number;
+  memorizedAt: number | null;
 };
 
 export const initialCards = dummyCards.sort((a, b) => a.order - b.order);

@@ -8,7 +8,7 @@ export const dummyCards: Card[] = [
     order: 1,
     memorized: false,
     createdAt: Date.now() - 1000 * 60 * 60 * 24 * 5, // 5 days ago
-    memorizedAt: 0,
+    memorizedAt: null,
   },
   {
     id: "2",
@@ -27,7 +27,7 @@ export const dummyCards: Card[] = [
     order: 3,
     memorized: false,
     createdAt: Date.now() - 1000 * 60 * 60 * 2, // 2 hours ago
-    memorizedAt: 0,
+    memorizedAt: null,
   },
   {
     id: "4",
@@ -46,6 +46,6 @@ export const dummyCards: Card[] = [
     order: 5,
     memorized: false,
     createdAt: Date.now() - 1000 * 60 * 10, // 10 minutes ago
-    memorizedAt: 0,
+    memorizedAt: null,
   },
 ];

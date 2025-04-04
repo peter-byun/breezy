@@ -11,5 +11,7 @@ export type Card = {
   /**
    * In MS
    */
-  memorizedAt: number;
+  memorizedAt: number | null;
 };
+
+export type CardId = Card["id"];
