@@ -21,7 +21,6 @@
     box-shadow: var(--box-shadow-picked-up);
   }
 }
-
 @keyframes fadeIn {
   0% {
     opacity: 0;
