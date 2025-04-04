@@ -107,7 +107,6 @@ export const DraggableActionCardList = ({
                     <ItemLayout>
                       <Text>{cards[index]?.title}</Text>
                       <Flex direction={"row"} gap={"5px"}>
-                        {/* TODO: Replace these with simple buttons with click handlers, and pass the events up to the root. */}
                         <EditCardButton
                           onClick={() => {
                             onEditClick(id);
