@@ -31,6 +31,7 @@ import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
 import { EditCardButton } from "../EditCard/EditCardButton";
 import { Card } from "@/features/card/api/type";
+import { MemorizeCardCheckbox } from "../MemorizeCard/MemorizeCardCheckbox";
 
 interface Props {
   cards: Card[];
@@ -106,7 +107,8 @@ export const DraggableActionCardList = ({
                   renderItem={() => (
                     <ItemLayout>
                       <Text>{cards[index]?.title}</Text>
-                      <Flex direction={"row"} gap={"5px"}>
+                      <Flex direction={"row"} gap={"10px"} align={"center"}>
+                        <MemorizeCardCheckbox />
                         <EditCardButton
                           onClick={() => {
                             onEditClick(id);

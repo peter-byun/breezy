@@ -11,16 +11,10 @@ export const DeleteCardButton = ({
   return (
     <IconButton
       onClick={(e) => {
-        console.log("click");
-        e.stopPropagation();
         onClick?.(e);
       }}
       color="red"
       variant="outline"
-      onMouseOver={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-      }}
       css={css`
         cursor: pointer;
       `}
