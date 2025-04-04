@@ -2,9 +2,9 @@ import { Button, Dialog, Flex, Text } from "@radix-ui/themes";
 import { useAppForm } from "@/ui-components/form/useAppForm";
 
 import { cardSchema } from "@/features/card/validation/cardSchema";
-import { DialogProps } from "@/ui-components/dialog/dialogType";
+import { DialogBaseProps } from "@/ui-components/dialog/dialogType";
 
-interface Props extends DialogProps {
+interface Props extends DialogBaseProps {
   onSubmit: (card: SavedCard) => void;
 }
 type SavedCard = {

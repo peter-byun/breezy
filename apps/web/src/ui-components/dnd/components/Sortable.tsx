@@ -19,17 +19,6 @@ import {
 } from "@dnd-kit/sortable";
 import { Item } from "./Item";
 
-interface GetItemStyles {
-  (args: {
-    id: UniqueIdentifier;
-    index: number;
-    isSorting: boolean;
-    isDragOverlay?: boolean;
-    overIndex: number;
-    isDragging: boolean;
-  }): React.CSSProperties;
-}
-
 export interface SortableProps {
   activationConstraint?: PointerActivationConstraint;
   animateLayoutChanges?: AnimateLayoutChanges;
@@ -54,6 +43,17 @@ export interface SortableProps {
     id: UniqueIdentifier;
   }): React.CSSProperties;
   isDisabled?(id: UniqueIdentifier): boolean;
+}
+
+interface GetItemStyles {
+  (args: {
+    id: UniqueIdentifier;
+    index: number;
+    isSorting: boolean;
+    isDragOverlay?: boolean;
+    overIndex: number;
+    isDragging: boolean;
+  }): React.CSSProperties;
 }
 
 interface SortableItemProps {

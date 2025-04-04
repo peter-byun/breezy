@@ -1,5 +1,5 @@
 "use client";
-import { FlipCard, FlipCardRef } from "@/features/card/FlipCard/FlipCard";
+import { FlipCard, FlipCardRef } from "@/app/play/components/FlipCard/FlipCard";
 import { useCard } from "@/features/card/useCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";

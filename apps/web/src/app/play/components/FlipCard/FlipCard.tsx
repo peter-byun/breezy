@@ -4,7 +4,7 @@ import { animated, useSpring } from "@react-spring/web";
 
 import { useDrag } from "@use-gesture/react";
 
-import { Card } from "../api/type";
+import { Card } from "../../../../features/card/api/type";
 import {
   PropsWithChildren,
   RefObject,
@@ -19,11 +19,6 @@ import {
   CardFront,
 } from "./FlipCardStyle";
 
-const FlipCardRootAnimated = animated(FlipCardRoot);
-const CardContentAnimated = animated(CardContent);
-
-export type FlipCardRef = RefObject<HTMLDivElement | null>;
-
 type FlipCardProps = PropsWithChildren<{
   card: Card;
   zIndex: number;
@@ -31,9 +26,13 @@ type FlipCardProps = PropsWithChildren<{
   onSwipeLeft?: (card: Card, ref: FlipCardRef) => void;
   onSwipeRight?: (card: Card, ref: FlipCardRef) => void;
 }>;
+export type FlipCardRef = RefObject<HTMLDivElement | null>;
 
-const ROTATION_FRONT = "rotateY(0deg)";
-const ROTATION_BACK = "rotateY(180deg)";
+const FlipCardRootAnimated = animated(FlipCardRoot);
+const CardContentAnimated = animated(CardContent);
+
+const CARD_ROTATION_FRONT = "rotateY(0deg)";
+const CARD_ROTATION_BACK = "rotateY(180deg)";
 
 export const FlipCard = (props: FlipCardProps) => {
   const { size = 300 } = props;
@@ -55,7 +54,7 @@ export const FlipCard = (props: FlipCardProps) => {
   }));
 
   const [{ transform }, flipEffectApi] = useSpring(() => ({
-    transform: ROTATION_FRONT,
+    transform: CARD_ROTATION_FRONT,
     config: {
       duration: 50,
     },
@@ -101,7 +100,7 @@ export const FlipCard = (props: FlipCardProps) => {
       if (last && distance[0] < 2 && distance[1] < 2) {
         setFlipped(!flipped);
         flipEffectApi.start({
-          transform: flipped ? ROTATION_FRONT : ROTATION_BACK,
+          transform: flipped ? CARD_ROTATION_FRONT : CARD_ROTATION_BACK,
         });
       }
     }
