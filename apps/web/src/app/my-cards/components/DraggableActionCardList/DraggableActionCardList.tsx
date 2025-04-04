@@ -31,15 +31,25 @@ import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
 import { EditCardButton } from "../EditCard/EditCardButton";
 import { Card } from "@/features/card/api/type";
-import { MemorizeCardCheckbox } from "../MemorizeCard/MemorizeCardCheckbox";
+import {
+  CardVisibilityCheckbox,
+  CheckedState,
+} from "../CardVisibility/CardVisibilityCheckbox";
 
 interface Props {
   cards: Card[];
   onCardsReorder: (cards: Card[]) => void;
   onEditClick: (cardId: string) => void;
   onDeleteClick: (cardId: string) => void;
+  onVisibilityCheckboxClick: OnVisibilityCheckboxClick;
 }
+export type OnVisibilityCheckboxClick = (
+  cardId: string,
+  checked: CheckedState
+) => void;
 
+const LIST_WIDTH = 800;
+const LIST_HEIGHT = 1000;
 const DRAG_TRIGGER_MOUSEDOWN_MS = 100;
 const DRAG_ABORT_MOVEMENT_PX = 10;
 const adjustScale = false;
@@ -50,6 +60,7 @@ export const DraggableActionCardList = ({
   onCardsReorder,
   onEditClick,
   onDeleteClick,
+  onVisibilityCheckboxClick,
 }: Props) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
@@ -98,25 +109,30 @@ export const DraggableActionCardList = ({
             itemCount={cards.length}
             stickyIndices={activeItemIndices}
             renderItem={({ index, style }) => {
-              const id = cards[index].id;
+              const card = cards[index];
               return (
                 <SortableItem
-                  key={id}
-                  id={id}
+                  key={card.id}
+                  id={card.id}
                   index={index}
                   renderItem={() => (
                     <ItemLayout>
-                      <Text>{cards[index]?.title}</Text>
+                      <Text>{card?.title}</Text>
                       <Flex direction={"row"} gap={"10px"} align={"center"}>
-                        <MemorizeCardCheckbox />
+                        <CardVisibilityCheckbox
+                          checked={card.memorized === false}
+                          onCheckedChange={(checked) => {
+                            onVisibilityCheckboxClick(card.id, checked);
+                          }}
+                        />
                         <EditCardButton
                           onClick={() => {
-                            onEditClick(id);
+                            onEditClick(card.id);
                           }}
                         />
                         <DeleteCardButton
                           onClick={() => {
-                            onDeleteClick(id);
+                            onDeleteClick(card.id);
                           }}
                         />
                       </Flex>
@@ -129,8 +145,8 @@ export const DraggableActionCardList = ({
                 />
               );
             }}
-            width={500}
-            height={800}
+            width={LIST_WIDTH}
+            height={LIST_HEIGHT}
             itemSize={64}
             className={styles.VirtualList}
           />

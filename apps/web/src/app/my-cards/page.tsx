@@ -2,7 +2,10 @@
 
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
-import { DraggableActionCardList } from "./components/DraggableActionCardList/DraggableActionCardList";
+import {
+  DraggableActionCardList,
+  OnVisibilityCheckboxClick,
+} from "./components/DraggableActionCardList/DraggableActionCardList";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
 import { useOverlay } from "@toss/use-overlay";
@@ -11,7 +14,15 @@ import { AddCardButton } from "./components/AddCard/AddCardButton";
 import { AddCardDialog } from "./components/AddCard/AddCardDialog";
 
 export default function MyCards() {
-  const { cards, setCards, createCard, editCard, deleteCard } = useCard();
+  const {
+    cards,
+    setCards,
+    createCard,
+    editCard,
+    deleteCard,
+    memorizeCard,
+    forgetCard,
+  } = useCard();
 
   const handleCardsReorder = (cards: Card[]) => {
     setCards(cards);
@@ -55,6 +66,17 @@ export default function MyCards() {
     deleteCard(cardId);
   };
 
+  const handleVisibilityCheckboxClick: OnVisibilityCheckboxClick = (
+    id,
+    checkedState
+  ) => {
+    if (checkedState === false) {
+      memorizeCard(id);
+    } else {
+      forgetCard(id);
+    }
+  };
+
   return (
     <PageLayout>
       <TopNavBar />
@@ -64,6 +86,7 @@ export default function MyCards() {
         onCardsReorder={handleCardsReorder}
         onEditClick={handleEditClick}
         onDeleteClick={handleDeleteClick}
+        onVisibilityCheckboxClick={handleVisibilityCheckboxClick}
       />
     </PageLayout>
   );
