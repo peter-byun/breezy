@@ -6,7 +6,30 @@
 ## Use Cases
 
 - Error handling
-  - for features
-  - and pages
+  - Make UI first
+    - Popup
+    - Toast
+  - Features
+    - My Cards
+      - Add card
+        - Popup
+      - Edit card
+        - Popup
+      - Delete card
+        - popup
+    - Play
+      - Move card
+        - Toast
+      - Remove Card
+        - Toast
+      - Flip card
+        - Toast
+  - pages
+    - my cards
+      - Error UI
+        - report the error(sentry)
+    - play
+      - Error UI
+        - report the error(sentry)
 - Mock API server implementation
 - Onboarding experience
