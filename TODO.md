@@ -5,29 +5,21 @@
 
 ## Use Cases
 
-- Error handling
-  - Features
-    - My Cards
-      - Add card
-        - Popup
-      - Edit card
-        - Popup
-      - Delete card
-        - popup
-    - Play
-      - Move card
-        - Toast
-      - Remove Card
-        - Toast
-      - Flip card
-        - Toast
-  - pages
-    - my cards
-      - Error UI
-        - report the error(sentry)
-    - play
-      - Error UI
-        - report the error(sentry)
 - Optimize dragging effect performance of DraggableActionCardList.
+- Form validation logic
+  - Add/edit card modals
 - Mock API server implementation
 - Onboarding experience
+  - The play page
+- Better error handling
+  - Card reload feature from the error fallback
+  - Report critical errors
+- Error handling
+  - pages
+    - my cards
+      - Page-level error UI and reporting, to prevent the whole app from crashing.
+        ```ts
+        captureException(); // Sentry SDK
+        ```
+    - play
+      - Page-level error UI
