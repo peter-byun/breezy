@@ -3,28 +3,26 @@ import { FlipCard, FlipCardRef } from "@/app/play/components/FlipCard/FlipCard";
 import { useCard } from "@/features/card/useCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
-import styled from "@emotion/styled";
+
 import { useEffect, useState } from "react";
 import { filterMemorizedCards } from "@/features/card/helpers/filterMemorizedCards";
-import { Button } from "@radix-ui/themes";
+
 import { css } from "@emotion/react";
+import { PageBody } from "@/layouts/page-layout/PageBody";
+import { CardStackLayout } from "./components/CardStack/CardStackLayout";
+import { CardStackProgress } from "./components/CardStack/CardStackProgress";
+import { useOpenToast } from "@/ui-components/toast/useOpenToast";
+import { Toast } from "@/ui-components/toast/Toast";
+import { ErrorBoundary } from "@suspensive/react";
+import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFallback";
 
 export default function Play() {
   const { cards, memorizeCard, moveCardToBottom, resetCards } = useCard();
+
   const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
   useEffect(() => {
     setCardsToShow(filterMemorizedCards(cards));
   }, [cards]);
-
-  const getCardZIndex = (idx: number) => {
-    if (idx === 0) {
-      return 2;
-    }
-    if (idx === 1) {
-      return 1;
-    }
-    return 0;
-  };
 
   const hideCard = (cardRef: FlipCardRef) => {
     return cardRef.current?.animate(
@@ -43,66 +41,79 @@ export default function Play() {
     ).finished;
   };
 
+  const getCardZIndex = (idx: number) => {
+    if (idx === 0) {
+      return 2;
+    }
+    if (idx === 1) {
+      return 1;
+    }
+    return 0;
+  };
+
+  const openToast = useOpenToast();
+
   return (
     <PageLayout>
       <TopNavBar />
-      <CardsStack>
-        {cardsToShow.map((card, idx) => (
-          <FlipCard
-            key={card.title}
-            card={card}
-            zIndex={getCardZIndex(idx)}
-            onSwipeLeft={(card, ref) => {
-              hideCard(ref)?.then(() => {
-                if (ref.current?.style) {
-                  ref.current.style.opacity = "0";
-                  memorizeCard(card.id);
-                }
-              });
-            }}
-            onSwipeRight={(card) => {
-              moveCardToBottom(card.id);
-            }}
-          >
-            {card.title}
-          </FlipCard>
-        ))}
-      </CardsStack>
-
-      <Progress>
-        {cardsToShow.length === 0 ? (
-          <Button
-            onClick={resetCards}
-            css={css`
-              padding: 20px;
-              font-size: 20px;
-            `}
-          >
-            🎉 Congrats! Wanna start over?
-          </Button>
-        ) : (
-          <h2>{cardsToShow.length} Cards left</h2>
-        )}
-      </Progress>
+      <PageBody
+        css={css`
+          justify-content: center;
+          row-gap: 20px;
+        `}
+      >
+        <ErrorBoundary fallback={<CardStackErrorFallback />}>
+          <CardStackLayout>
+            {cardsToShow.map((card, idx) => (
+              <FlipCard
+                key={card.title}
+                card={card}
+                zIndex={getCardZIndex(idx)}
+                onSwipeLeft={(card, ref) => {
+                  try {
+                    hideCard(ref)?.then(() => {
+                      if (ref.current?.style) {
+                        ref.current.style.opacity = "0";
+                        memorizeCard(card.id);
+                      }
+                    });
+                  } catch {
+                    openToast((props) => (
+                      <Toast
+                        {...props}
+                        title="Failed to mark a card as memorized."
+                      />
+                    ));
+                  }
+                }}
+                onSwipeRight={(card) => {
+                  try {
+                    moveCardToBottom(card.id);
+                  } catch {
+                    openToast((props) => (
+                      <Toast
+                        {...props}
+                        title="Failed to move a card to the bottom of a stack."
+                      />
+                    ));
+                  }
+                }}
+              >
+                {card.title}
+              </FlipCard>
+            ))}
+          </CardStackLayout>
+          <CardStackProgress.Layout>
+            {cardsToShow.length === 0 ? (
+              <CardStackProgress.StartOverButton onClick={resetCards} />
+            ) : (
+              <CardStackProgress.Count>
+                {cardsToShow.length} Cards left
+              </CardStackProgress.Count>
+            )}
+          </CardStackProgress.Layout>
+        </ErrorBoundary>
+      </PageBody>
     </PageLayout>
   );
 }
-
-const CardsStack = styled.section`
-  background-color: transparent;
-  min-width: 300px;
-  min-height: 300px;
-  padding: 20px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Progress = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
