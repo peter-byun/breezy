@@ -7,6 +7,7 @@ import { Theme } from "@radix-ui/themes";
 
 import { OverlayProvider } from "@toss/use-overlay";
 import ReactQueryProvider from "@/layouts/library-provider/ReactQueryProvider";
+import { css } from "@emotion/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,11 @@ export default function Layout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <Theme>
+        <Theme
+          css={css`
+            height: 100%;
+          `}
+        >
           <OverlayProvider>
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </OverlayProvider>
