@@ -12,6 +12,14 @@ import { useOverlay } from "@toss/use-overlay";
 import { Card } from "@/features/card/api/type";
 import { AddCardButton } from "./components/AddCard/AddCardButton";
 import { AddCardDialog } from "./components/AddCard/AddCardDialog";
+import { useOpenAlert } from "@/ui-components/alert/useOpenAlert";
+import { Alert } from "@/ui-components/alert/Alert";
+
+import { ErrorBoundary } from "@suspensive/react";
+import { CardListErrorFallback } from "./components/DraggableActionCardList/CardListErrorFallback";
+
+import { PageBody } from "@/layouts/page-layout/PageBody";
+import { css } from "@emotion/react";
 
 export default function MyCards() {
   const {
@@ -28,6 +36,8 @@ export default function MyCards() {
     setCards(cards);
   };
 
+  const openAlert = useOpenAlert();
+
   const addCardOverlay = useOverlay();
   const handleAddCardClick = () => {
     addCardOverlay.open(({ isOpen, close }) => (
@@ -39,7 +49,18 @@ export default function MyCards() {
           }
         }}
         onSubmit={(card) => {
-          createCard(card);
+          try {
+            createCard(card);
+          } catch {
+            openAlert((props) => (
+              <Alert
+                {...props}
+                title="Sorry"
+                description="An error occurred while creating a card 😢"
+                confirmLabel="Okay"
+              />
+            ));
+          }
         }}
       />
     ));
@@ -56,14 +77,36 @@ export default function MyCards() {
           }
         }}
         onSubmit={(card) => {
-          editCard(cardId, card);
+          try {
+            editCard(cardId, card);
+          } catch {
+            openAlert((props) => (
+              <Alert
+                {...props}
+                title="Sorry"
+                description="An error occurred while updating the card 😢"
+                confirmLabel="Okay"
+              />
+            ));
+          }
         }}
       />
     ));
   };
 
   const handleDeleteClick = (cardId: string) => {
-    deleteCard(cardId);
+    try {
+      deleteCard(cardId);
+    } catch {
+      openAlert((props) => (
+        <Alert
+          {...props}
+          title="Sorry"
+          description="An error occurred while deleting the card 😢"
+          confirmLabel="Okay"
+        />
+      ));
+    }
   };
 
   const handleVisibilityCheckboxClick: OnVisibilityCheckboxClick = (
@@ -78,16 +121,24 @@ export default function MyCards() {
   };
 
   return (
-    <PageLayout>
+    <PageLayout
+      css={css`
+        gap: 20px;
+      `}
+    >
       <TopNavBar />
-      <AddCardButton onClick={handleAddCardClick} />
-      <DraggableActionCardList
-        cards={cards}
-        onCardsReorder={handleCardsReorder}
-        onEditClick={handleEditClick}
-        onDeleteClick={handleDeleteClick}
-        onVisibilityCheckboxClick={handleVisibilityCheckboxClick}
-      />
+      <PageBody>
+        <AddCardButton onClick={handleAddCardClick} />
+        <ErrorBoundary fallback={<CardListErrorFallback />}>
+          <DraggableActionCardList
+            cards={cards}
+            onCardsReorder={handleCardsReorder}
+            onEditClick={handleEditClick}
+            onDeleteClick={handleDeleteClick}
+            onVisibilityCheckboxClick={handleVisibilityCheckboxClick}
+          />
+        </ErrorBoundary>
+      </PageBody>
     </PageLayout>
   );
 }
