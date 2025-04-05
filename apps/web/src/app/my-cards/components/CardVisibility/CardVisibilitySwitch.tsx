@@ -1,23 +1,25 @@
 import { css } from "@emotion/react";
-import { Checkbox, Flex, Text, CheckboxProps } from "@radix-ui/themes";
+import { Flex, Text, SwitchProps, Switch } from "@radix-ui/themes";
 
-export type CheckedState = CheckboxProps["checked"];
+export type CheckedState = SwitchProps["checked"];
 
-export const CardVisibilityCheckbox = ({
+export const CardVisibilitySwitch = ({
   checked,
   onCheckedChange,
-}: CheckboxProps) => {
+}: SwitchProps) => {
   return (
     <Text as="label" size="2">
       <Flex gap="2" direction={"row"} align={"center"}>
-        <Checkbox
+        <Switch
           checked={checked}
           onCheckedChange={onCheckedChange}
           css={css`
             cursor: pointer;
           `}
           color="purple"
+          size={"1"}
         />
+
         <Text color="purple">{checked ? "Visible" : "Hidden"}</Text>
       </Flex>
     </Text>

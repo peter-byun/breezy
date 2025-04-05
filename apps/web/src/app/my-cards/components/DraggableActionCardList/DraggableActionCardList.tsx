@@ -32,10 +32,9 @@ import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
 import { EditCardButton } from "../EditCard/EditCardButton";
 import { Card } from "@/features/card/api/type";
 import {
-  CardVisibilityCheckbox,
+  CardVisibilitySwitch,
   CheckedState,
-} from "../CardVisibility/CardVisibilityCheckbox";
-
+} from "../CardVisibility/CardVisibilitySwitch";
 interface Props {
   cards: Card[];
   onCardsReorder: (cards: Card[]) => void;
@@ -124,7 +123,7 @@ export const DraggableActionCardList = ({
                     return (
                       <ItemLayout>
                         <Flex direction={"row"} gap={"10px"} align={"center"}>
-                          <CardVisibilityCheckbox
+                          <CardVisibilitySwitch
                             checked={card.memorized === false}
                             onCheckedChange={(checked) => {
                               onVisibilityCheckboxClick(card.id, checked);

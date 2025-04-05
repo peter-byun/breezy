@@ -31,5 +31,6 @@
     - play
       - Error UI
         - report the error(sentry)
+- Optimize dragging effect performance of DraggableActionCardList.
 - Mock API server implementation
 - Onboarding experience
