@@ -29,7 +29,7 @@ export const Alert = ({
   return (
     <AlertDialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialog.Content maxWidth="450px">
-        <Flex gap="3" align="center" justify="center">
+        <Flex gap="3" direction={"column"} align="center" justify="center">
           <AlertDialog.Title
             css={css`
               margin: 0px;
