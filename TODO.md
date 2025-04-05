@@ -6,9 +6,6 @@
 ## Use Cases
 
 - Error handling
-  - Make UI first
-    - Popup
-    - Toast
   - Features
     - My Cards
       - Add card
