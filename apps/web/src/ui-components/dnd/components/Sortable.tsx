@@ -62,8 +62,8 @@ interface SortableItemProps {
   getNewIndex?: NewIndexGetter;
   id: UniqueIdentifier;
   index: number;
-  onRemove?(id: UniqueIdentifier): void;
   renderItem?(): React.ReactElement;
+  renderActions?(): React.ReactElement;
   wrapperStyle: SortableProps["wrapperStyle"];
 }
 
@@ -74,6 +74,7 @@ export function SortableItem({
   id,
   index,
   renderItem,
+  renderActions,
   wrapperStyle,
 }: SortableItemProps) {
   const {
@@ -100,6 +101,7 @@ export function SortableItem({
       dragging={isDragging}
       sorting={isSorting}
       renderItem={renderItem}
+      renderActions={renderActions}
       index={index}
       transform={transform}
       transition={transition}

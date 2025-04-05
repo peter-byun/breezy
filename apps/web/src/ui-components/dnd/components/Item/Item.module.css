@@ -83,7 +83,6 @@
 
 .Item:not(.withHandle) {
   touch-action: manipulation;
-  cursor: grab;
 }
 
 .Item.dragging:not(.dragOverlay) {

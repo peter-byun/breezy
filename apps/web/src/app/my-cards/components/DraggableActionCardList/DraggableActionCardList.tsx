@@ -50,7 +50,7 @@ export type OnVisibilityCheckboxClick = (
 
 const LIST_WIDTH = 800;
 const LIST_HEIGHT = 1000;
-const DRAG_TRIGGER_MOUSEDOWN_MS = 100;
+const DRAG_TRIGGER_MOUSEDOWN_MS = 50;
 const DRAG_ABORT_MOVEMENT_PX = 10;
 const adjustScale = false;
 const strategy = verticalListSortingStrategy;
@@ -118,26 +118,32 @@ export const DraggableActionCardList = ({
                   renderItem={() => (
                     <ItemLayout>
                       <Text>{card?.title}</Text>
-                      <Flex direction={"row"} gap={"10px"} align={"center"}>
-                        <CardVisibilityCheckbox
-                          checked={card.memorized === false}
-                          onCheckedChange={(checked) => {
-                            onVisibilityCheckboxClick(card.id, checked);
-                          }}
-                        />
-                        <EditCardButton
-                          onClick={() => {
-                            onEditClick(card.id);
-                          }}
-                        />
-                        <DeleteCardButton
-                          onClick={() => {
-                            onDeleteClick(card.id);
-                          }}
-                        />
-                      </Flex>
                     </ItemLayout>
                   )}
+                  renderActions={() => {
+                    return (
+                      <ItemLayout>
+                        <Flex direction={"row"} gap={"10px"} align={"center"}>
+                          <CardVisibilityCheckbox
+                            checked={card.memorized === false}
+                            onCheckedChange={(checked) => {
+                              onVisibilityCheckboxClick(card.id, checked);
+                            }}
+                          />
+                          <EditCardButton
+                            onClick={() => {
+                              onEditClick(card.id);
+                            }}
+                          />
+                          <DeleteCardButton
+                            onClick={() => {
+                              onDeleteClick(card.id);
+                            }}
+                          />
+                        </Flex>
+                      </ItemLayout>
+                    );
+                  }}
                   wrapperStyle={() => ({
                     ...style,
                     padding: 5,

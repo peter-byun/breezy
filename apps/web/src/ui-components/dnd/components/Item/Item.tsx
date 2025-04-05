@@ -4,6 +4,9 @@ import type { DraggableSyntheticListeners } from "@dnd-kit/core";
 import type { Transform } from "@dnd-kit/utilities";
 
 import styles from "./Item.module.css";
+import { DragHandleDots1Icon } from "@radix-ui/react-icons";
+import { Flex } from "@radix-ui/themes";
+import { css } from "@emotion/react";
 
 export interface Props {
   dragOverlay?: boolean;
@@ -33,6 +36,7 @@ export interface Props {
     transition: Props["transition"];
     value: Props["value"];
   }): React.ReactElement;
+  renderActions?(): React.ReactElement;
 }
 
 export const Item = memo(
@@ -52,6 +56,7 @@ export const Item = memo(
         transform,
         wrapperStyle,
         renderItem,
+        renderActions,
         value,
         ...props
       },
@@ -110,24 +115,43 @@ export const Item = memo(
               color && styles.color
             )}
             style={style}
-            data-cypress="draggable-item"
-            {...listeners}
-            {...props}
-            tabIndex={0}
           >
-            {renderItem?.({
-              dragging: dragging ?? false,
-              dragOverlay: dragOverlay ?? false,
-              fadeIn: fadeIn ?? false,
-              index,
-              listeners,
-              ref,
-              sorting: sorting ?? false,
-              style,
-              transform,
-              transition,
-              value: value,
-            })}
+            <div
+              {...listeners}
+              {...props}
+              tabIndex={0}
+              css={css`
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              `}
+            >
+              <Flex
+                direction={"row"}
+                align={"center"}
+                gap={"1"}
+                css={css`
+                  cursor: grab;
+                `}
+              >
+                <DragHandleDots1Icon></DragHandleDots1Icon>
+                {renderItem?.({
+                  dragging: dragging ?? false,
+                  dragOverlay: dragOverlay ?? false,
+                  fadeIn: fadeIn ?? false,
+                  index,
+                  listeners,
+                  ref,
+                  sorting: sorting ?? false,
+                  style,
+                  transform,
+                  transition,
+                  value: value,
+                })}
+              </Flex>
+            </div>
+            {renderActions?.()}
           </div>
         </li>
       );
