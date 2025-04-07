@@ -22,21 +22,8 @@ export interface Props {
   style?: React.CSSProperties;
   transition?: string | null;
   wrapperStyle?: React.CSSProperties;
-  value: React.ReactNode;
-  renderItem?(args: {
-    dragOverlay: boolean;
-    dragging: boolean;
-    sorting: boolean;
-    index: number | undefined;
-    fadeIn: boolean;
-    listeners: DraggableSyntheticListeners;
-    ref: React.Ref<HTMLElement>;
-    style: React.CSSProperties | undefined;
-    transform: Props["transform"];
-    transition: Props["transition"];
-    value: Props["value"];
-  }): React.ReactElement;
-  renderActions?(): React.ReactElement;
+  title: React.ReactNode;
+  actions?: React.ReactNode;
 }
 
 export const Item = memo(
@@ -55,9 +42,8 @@ export const Item = memo(
         transition,
         transform,
         wrapperStyle,
-        renderItem,
-        renderActions,
-        value,
+        title,
+        actions,
         ...props
       },
       ref
@@ -136,22 +122,10 @@ export const Item = memo(
                 `}
               >
                 <DragHandleDots1Icon></DragHandleDots1Icon>
-                {renderItem?.({
-                  dragging: dragging ?? false,
-                  dragOverlay: dragOverlay ?? false,
-                  fadeIn: fadeIn ?? false,
-                  index,
-                  listeners,
-                  ref,
-                  sorting: sorting ?? false,
-                  style,
-                  transform,
-                  transition,
-                  value: value,
-                })}
+                {title}
               </Flex>
             </div>
-            {renderActions?.()}
+            {actions}
           </div>
         </li>
       );
