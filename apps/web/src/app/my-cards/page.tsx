@@ -4,7 +4,7 @@ import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import {
   DraggableActionCardList,
-  OnVisibilityCheckboxClick,
+  OnVisibilitySwitchClick,
 } from "./components/DraggableActionCardList/DraggableActionCardList";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
@@ -109,7 +109,7 @@ export default function MyCards() {
     }
   };
 
-  const handleVisibilityCheckboxClick: OnVisibilityCheckboxClick = (
+  const handleVisibilityCheckboxClick: OnVisibilitySwitchClick = (
     id,
     checkedState
   ) => {
@@ -135,7 +135,7 @@ export default function MyCards() {
             onCardsReorder={handleCardsReorder}
             onEditClick={handleEditClick}
             onDeleteClick={handleDeleteClick}
-            onVisibilityCheckboxClick={handleVisibilityCheckboxClick}
+            OnVisibilitySwitchClick={handleVisibilityCheckboxClick}
           />
         </ErrorBoundary>
       </PageBody>
