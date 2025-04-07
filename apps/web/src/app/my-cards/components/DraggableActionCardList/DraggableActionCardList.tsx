@@ -22,27 +22,22 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { Wrapper } from "@/ui-components/dnd/components/Wrapper";
-import { SortableItem } from "@/ui-components/dnd/components/Sortable";
 import { Item } from "@/ui-components/dnd/components/Item";
 
-import { Flex, Text } from "@radix-ui/themes";
+import { Text } from "@radix-ui/themes";
 
-import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
-import { EditCardButton } from "../EditCard/EditCardButton";
 import { Card } from "@/features/card/api/type";
-import {
-  CardVisibilitySwitch,
-  CheckedState,
-} from "../CardVisibility/CardVisibilitySwitch";
+import { CheckedState } from "../CardVisibility/CardVisibilitySwitch";
+import { SortableOptimized } from "./SortableOptimized";
 interface Props {
   cards: Card[];
   onCardsReorder: (cards: Card[]) => void;
   onEditClick: (cardId: string) => void;
   onDeleteClick: (cardId: string) => void;
-  onVisibilityCheckboxClick: OnVisibilityCheckboxClick;
+  OnVisibilitySwitchClick: OnVisibilitySwitchClick;
 }
-export type OnVisibilityCheckboxClick = (
+export type OnVisibilitySwitchClick = (
   cardId: string,
   checked: CheckedState
 ) => void;
@@ -51,15 +46,13 @@ const LIST_WIDTH = 800;
 const LIST_HEIGHT = 1000;
 const DRAG_TRIGGER_MOUSEDOWN_MS = 50;
 const DRAG_ABORT_MOVEMENT_PX = 10;
-const adjustScale = false;
-const strategy = verticalListSortingStrategy;
 
 export const DraggableActionCardList = ({
   cards,
   onCardsReorder,
   onEditClick,
   onDeleteClick,
-  onVisibilityCheckboxClick,
+  OnVisibilitySwitchClick,
 }: Props) => {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const sensors = useSensors(
@@ -103,50 +96,22 @@ export const DraggableActionCardList = ({
       onDragCancel={() => setActiveId(null)}
     >
       <Wrapper center={true}>
-        <SortableContext items={cards} strategy={strategy}>
+        <SortableContext items={cards} strategy={verticalListSortingStrategy}>
           <VirtualList
             itemCount={cards.length}
             stickyIndices={activeItemIndices}
             renderItem={({ index, style }) => {
               const card = cards[index];
               return (
-                <SortableItem
+                <SortableOptimized
                   key={card.id}
                   id={card.id}
                   index={index}
-                  renderItem={() => (
-                    <ItemLayout>
-                      <Text>{card?.title}</Text>
-                    </ItemLayout>
-                  )}
-                  renderActions={() => {
-                    return (
-                      <ItemLayout>
-                        <Flex direction={"row"} gap={"10px"} align={"center"}>
-                          <CardVisibilitySwitch
-                            checked={card.memorized === false}
-                            onCheckedChange={(checked) => {
-                              onVisibilityCheckboxClick(card.id, checked);
-                            }}
-                          />
-                          <EditCardButton
-                            onClick={() => {
-                              onEditClick(card.id);
-                            }}
-                          />
-                          <DeleteCardButton
-                            onClick={() => {
-                              onDeleteClick(card.id);
-                            }}
-                          />
-                        </Flex>
-                      </ItemLayout>
-                    );
-                  }}
-                  wrapperStyle={() => ({
-                    ...style,
-                    padding: 5,
-                  })}
+                  wrapperStyle={style}
+                  card={card}
+                  onEditClick={onEditClick}
+                  OnVisibilitySwitchClick={OnVisibilitySwitchClick}
+                  onDeleteClick={onDeleteClick}
                 />
               );
             }}
@@ -159,19 +124,18 @@ export const DraggableActionCardList = ({
       </Wrapper>
       {typeof window !== "undefined" &&
         createPortal(
-          <DragOverlay adjustScale={adjustScale}>
+          <DragOverlay adjustScale={false}>
             {activeId != null ? (
               <Item
-                value={cards[activeItemIndex].content}
-                renderItem={() => (
+                title={
                   <ItemLayout>
                     <Text>{cards[activeItemIndex]?.title}</Text>
                   </ItemLayout>
-                )}
+                }
                 wrapperStyle={{
                   padding: 5,
                 }}
-                dragOverlay
+                dragOverlay={true}
               />
             ) : null}
           </DragOverlay>,
