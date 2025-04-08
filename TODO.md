@@ -5,9 +5,8 @@
 
 ## Use Cases
 
-- Form validation logic
-  - Add/edit card modals
 - Mock API server implementation
+  - Check out the mock Card data and write a mock API based on the use-cases.
 - Onboarding experience
   - The play page
 - Better error handling
