@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import type { DraggableSyntheticListeners } from "@dnd-kit/core";
 import type { Transform } from "@dnd-kit/utilities";
 
-import styles from "./Item.module.css";
+import styles from "./DnDItem.module.css";
 import { DragHandleDots1Icon } from "@radix-ui/react-icons";
 import { Flex } from "@radix-ui/themes";
 import { css } from "@emotion/react";
@@ -26,7 +26,7 @@ export interface Props {
   actions?: React.ReactNode;
 }
 
-export const Item = memo(
+export const DndItem = memo(
   forwardRef<HTMLLIElement, Props>(
     (
       {
