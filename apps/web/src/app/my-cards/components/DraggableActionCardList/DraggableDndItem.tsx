@@ -1,8 +1,7 @@
 "use client";
 
 import { Card } from "@/features/card/api/type";
-import { Item } from "@/ui-components/dnd/components/Item";
-import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
+
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { Flex, Text } from "@radix-ui/themes";
@@ -12,8 +11,10 @@ import { CardVisibilitySwitch } from "../CardVisibility/CardVisibilitySwitch";
 import { EditCardButton } from "../EditCard/EditCardButton";
 import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
 import { OnVisibilitySwitchClick } from "./DraggableActionCardList";
+import { DndItemLayout } from "@/ui-components/dnd/DnDItem/DndItemLayout";
+import { DndItem } from "@/ui-components/dnd/DnDItem/DnDItem";
 
-interface SortableItemProps {
+interface Props {
   id: UniqueIdentifier;
   index: number;
   wrapperStyle: ItemStyle;
@@ -26,7 +27,7 @@ interface SortableItemProps {
 
 const disabled = false;
 
-export const SortableOptimized = memo(function Sortable({
+export const DraggableDndItem = memo(function Sortable({
   id,
   index,
   wrapperStyle,
@@ -35,7 +36,7 @@ export const SortableOptimized = memo(function Sortable({
   OnVisibilitySwitchClick,
   onEditClick,
   onDeleteClick,
-}: SortableItemProps) {
+}: Props) {
   const {
     active,
     attributes,
@@ -59,16 +60,16 @@ export const SortableOptimized = memo(function Sortable({
 
   const title = useMemo(
     () => (
-      <ItemLayout>
+      <DndItemLayout>
         <Text>{card?.title}</Text>
-      </ItemLayout>
+      </DndItemLayout>
     ),
     [card]
   );
 
   const actions = useMemo(
     () => (
-      <ItemLayout>
+      <DndItemLayout>
         <Flex direction={"row"} gap={"10px"} align={"center"}>
           <CardVisibilitySwitch
             checked={card.memorized === false}
@@ -87,7 +88,7 @@ export const SortableOptimized = memo(function Sortable({
             }}
           />
         </Flex>
-      </ItemLayout>
+      </DndItemLayout>
     ),
     [
       card.id,
@@ -99,7 +100,7 @@ export const SortableOptimized = memo(function Sortable({
   );
 
   return (
-    <Item
+    <DndItem
       ref={setNodeRef}
       disabled={disabled}
       dragging={isDragging}
