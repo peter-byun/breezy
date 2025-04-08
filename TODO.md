@@ -5,7 +5,6 @@
 
 ## Use Cases
 
-- Refactor the virtual list component
 - Form validation logic
   - Add/edit card modals
 - Mock API server implementation
