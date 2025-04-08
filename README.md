@@ -27,7 +27,12 @@ Backend is a private repo for security reasons.
   - [Zod](https://zod.dev/)
 - Form
   - [Tanstack Form](https://tanstack.com/form/latest/docs/overview)
+    - Rationale: It does all the heavy-lifting for building forms without excessive abstraction which is great when debugging or customizing a complex form.
 - State Management
-  - Try flattening components using the composition pattern
-  - Query parameters
-  - For dynamic regional states, use [Jotai](https://jotai.org/)
+  1. Try flattening components using the composition pattern
+  2. Consider query parameters when it makes sense
+  - Passing one-off data to a page
+  - Persisting data between page refreshes
+  - Representing the page’s status when the page is shared as a link
+  3. For highly dynamic regional states, use [Jotai](https://jotai.org/)
+  - But keep the scope as small as possible, to avoid transitive dependencies.
