@@ -19,7 +19,7 @@ export const EditCardDialog = ({ open, setOpen, onSubmit }: Props) => {
       content: "",
     },
     validators: {
-      onChange: cardSchema,
+      onSubmit: cardSchema,
     },
     onSubmit: ({ value, formApi }) => {
       onSubmit(value);
@@ -50,12 +50,17 @@ export const EditCardDialog = ({ open, setOpen, onSubmit }: Props) => {
               </Text>
               <form.AppField name="title">
                 {(field) => (
-                  <field.FormTextField
-                    placeholder="Enter the title"
-                    defaultValue={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                  />
+                  <>
+                    <field.FormTextField
+                      placeholder="Enter the title"
+                      defaultValue={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                    />
+                    <field.FormErrorText>
+                      {field.state.meta.errors[0]?.message}
+                    </field.FormErrorText>
+                  </>
                 )}
               </form.AppField>
             </label>
@@ -65,12 +70,17 @@ export const EditCardDialog = ({ open, setOpen, onSubmit }: Props) => {
               </Text>
               <form.AppField name="content">
                 {(field) => (
-                  <field.FormTextField
-                    placeholder="Enter the content for title"
-                    defaultValue={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    onBlur={field.handleBlur}
-                  />
+                  <>
+                    <field.FormTextField
+                      placeholder="Enter the content for title"
+                      defaultValue={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                    />
+                    <field.FormErrorText>
+                      {field.state.meta.errors[0]?.message}
+                    </field.FormErrorText>
+                  </>
                 )}
               </form.AppField>
             </label>
