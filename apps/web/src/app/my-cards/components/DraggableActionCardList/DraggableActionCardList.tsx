@@ -21,15 +21,14 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Wrapper } from "@/ui-components/dnd/components/Wrapper";
-import { Item } from "@/ui-components/dnd/components/Item";
 
-import { Text } from "@radix-ui/themes";
-
-import { ItemLayout } from "@/ui-components/dnd/components/Item/ItemLayout";
 import { Card } from "@/features/card/api/type";
 import { CheckedState } from "../CardVisibility/CardVisibilitySwitch";
-import { SortableOptimized } from "./SortableOptimized";
+import { DraggableDndItem } from "./DraggableDndItem";
+import { DndListLayout } from "@/ui-components/dnd/DndList/DndListLayout";
+import { ActiveDraggableDndItem } from "./ActiveDraggableDndItem";
+import { isBrowser, isNotNil } from "es-toolkit";
+
 interface Props {
   cards: Card[];
   onCardsReorder: (cards: Card[]) => void;
@@ -86,16 +85,16 @@ export const DraggableActionCardList = ({
       }}
       onDragEnd={({ over }) => {
         if (over) {
-          const overIndex = getIndex(over.id);
-          if (activeItemIndex !== overIndex) {
-            onCardsReorder(arrayMove(cards, activeItemIndex, overIndex));
+          const coveredItemIndex = getIndex(over.id);
+          if (activeItemIndex !== coveredItemIndex) {
+            onCardsReorder(arrayMove(cards, activeItemIndex, coveredItemIndex));
           }
         }
         setActiveId(null);
       }}
       onDragCancel={() => setActiveId(null)}
     >
-      <Wrapper center={true}>
+      <DndListLayout center={true}>
         <SortableContext items={cards} strategy={verticalListSortingStrategy}>
           <VirtualList
             itemCount={cards.length}
@@ -103,7 +102,7 @@ export const DraggableActionCardList = ({
             renderItem={({ index, style }) => {
               const card = cards[index];
               return (
-                <SortableOptimized
+                <DraggableDndItem
                   key={card.id}
                   id={card.id}
                   index={index}
@@ -121,23 +120,13 @@ export const DraggableActionCardList = ({
             className={styles.VirtualList}
           />
         </SortableContext>
-      </Wrapper>
-      {typeof window !== "undefined" &&
+      </DndListLayout>
+      {isBrowser() &&
         createPortal(
           <DragOverlay adjustScale={false}>
-            {activeId != null ? (
-              <Item
-                title={
-                  <ItemLayout>
-                    <Text>{cards[activeItemIndex]?.title}</Text>
-                  </ItemLayout>
-                }
-                wrapperStyle={{
-                  padding: 5,
-                }}
-                dragOverlay={true}
-              />
-            ) : null}
+            {isNotNil(activeId) && (
+              <ActiveDraggableDndItem title={cards[activeItemIndex]?.title} />
+            )}
           </DragOverlay>,
           document.body
         )}
