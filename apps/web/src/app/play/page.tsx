@@ -17,7 +17,7 @@ import { ErrorBoundary } from "@suspensive/react";
 import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFallback";
 
 export default function Play() {
-  const { cards, memorizeCard, moveCardToBottom, resetCards } = useCard();
+  const { cards, memorizeCard, moveCardToBottom } = useCard();
 
   const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
   useEffect(() => {
@@ -39,6 +39,10 @@ export default function Play() {
         iterations: 1,
       }
     ).finished;
+  };
+
+  const resetCards = () => {
+    setCardsToShow(filterMemorizedCards(cards));
   };
 
   const getCardZIndex = (idx: number) => {
