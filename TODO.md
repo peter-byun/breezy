@@ -5,9 +5,11 @@
 
 ## Use Cases
 
-- Mock API server implementation
-  - Check out the mock Card data and write a mock API based on the use-cases.
-  - non-blocking suspense, practical error boundaries
+- Fix play/my-cards pages
+  - Mock API integration broke most features
+- Refactor my-cards page
+  - non-blocking suspense
+  - separating concerns
 - Onboarding experience
   - The play page
 - Better error handling
@@ -21,3 +23,4 @@
           ```
       - play
         - Page-level error UI
+- Implement loading.tsx pages
