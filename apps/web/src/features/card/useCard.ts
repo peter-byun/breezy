@@ -1,95 +1,53 @@
+"use client";
+
+import { breezyApiClient } from "./api/api";
+import { getCardQueryOptions } from "./api/queryOptions";
 import { Card, CardId } from "./api/type";
 
-import { cardsAtom, initialCards } from "./atom/cardsAtom";
-import { useAtom } from "jotai";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export const useCard = () => {
-  // TODO: Fetch it from the backend
-
-  const [cards, setCards] = useAtom(cardsAtom);
+  const { data: cards } = useSuspenseQuery(getCardQueryOptions);
 
   const createCard = (card: Pick<Card, "title" | "content">) => {
-    const newCardDefaultProps: Omit<Card, "title" | "content"> = {
-      order: cards.length + 1,
-      id: String(cards.length + 1),
-      memorized: false,
-      createdAt: Date.now() - 1000 * 60 * 60 * 2,
-      memorizedAt: null,
-    };
-
-    const newCard: Card = {
-      ...newCardDefaultProps,
-      ...card,
-    };
-
-    setCards([...cards, newCard]);
+    breezyApiClient.post("/card", card);
   };
 
   const memorizeCard = (id: CardId) => {
-    setCards(
-      cards.map((card) =>
-        card.id === id
-          ? { ...card, memorized: true, memorizedAt: Date.now() }
-          : card
-      )
-    );
+    breezyApiClient.patch(`/card/${id}/memorized`, {
+      memorized: true,
+    });
   };
   const forgetCard = (id: CardId) => {
-    setCards(
-      cards.map((card) =>
-        card.id === id ? { ...card, memorized: false, memorizedAt: null } : card
-      )
-    );
+    breezyApiClient.patch(`/card/${id}/memorized`, {
+      memorized: false,
+    });
   };
 
   const moveCardToBottom = (id: CardId) => {
-    const cardIdxToMove = cards.findIndex((c) => c.id === id);
-    const card = cards[cardIdxToMove];
+    const lastIdx = cards.length - 1;
+    const toIdx = lastIdx < 0 ? 0 : lastIdx;
 
-    const nextCards = [...cards];
-    nextCards.splice(cardIdxToMove, 1);
-    nextCards.push(card);
-
-    setCards(nextCards);
+    breezyApiClient.patch(`/card/${id}/reorder`, {
+      toIdx,
+    });
   };
 
   const editCard = (id: CardId, card: Pick<Card, "title" | "content">) => {
-    const cardIdxToEdit = cards.findIndex((c) => c.id === id);
-
-    const cardToEdit: Card = {
-      ...cards[cardIdxToEdit],
-      title: card.title,
-      content: card.content,
-    };
-
-    const nextCards = [...cards];
-    nextCards.splice(cardIdxToEdit, 1, cardToEdit);
-
-    setCards(nextCards);
+    breezyApiClient.patch(`/card/${id}`, card);
   };
 
   const deleteCard = (id: CardId) => {
-    const cardIdxToForget = cards.findIndex((c) => c.id === id);
-
-    const nextCards = [...cards];
-    nextCards.splice(cardIdxToForget, 1);
-
-    setCards(nextCards);
-  };
-
-  const resetCards = () => {
-    setCards([...initialCards]);
+    breezyApiClient.delete(`/card/${id}`);
   };
 
   return {
     cards,
-    setCards,
     memorizeCard,
     forgetCard,
     moveCardToBottom,
     createCard,
     editCard,
     deleteCard,
-    resetCards,
   };
 };
