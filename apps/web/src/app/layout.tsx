@@ -8,6 +8,7 @@ import { Theme } from "@radix-ui/themes";
 import { OverlayProvider } from "@toss/use-overlay";
 import ReactQueryProvider from "@/layouts/library-provider/ReactQueryProvider";
 import { css } from "@emotion/react";
+import { enableMocking } from "@/api-mocks/integrations/enableMocking";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +18,8 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+enableMocking();
 
 export default function Layout({
   children,
