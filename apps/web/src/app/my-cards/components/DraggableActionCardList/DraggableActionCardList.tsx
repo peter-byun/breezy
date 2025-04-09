@@ -16,7 +16,6 @@ import {
   UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   sortableKeyboardCoordinates,
   SortableContext,
   verticalListSortingStrategy,
@@ -31,11 +30,12 @@ import { isBrowser, isNotNil } from "es-toolkit";
 
 interface Props {
   cards: Card[];
-  onCardsReorder: (cards: Card[]) => void;
+  onCardsReorder: OnCardsReorder;
   onEditClick: (cardId: string) => void;
   onDeleteClick: (cardId: string) => void;
   OnVisibilitySwitchClick: OnVisibilitySwitchClick;
 }
+export type OnCardsReorder = (params: { id: string; toIdx: number }) => void;
 export type OnVisibilitySwitchClick = (
   cardId: string,
   checked: CheckedState
@@ -87,7 +87,11 @@ export const DraggableActionCardList = ({
         if (over) {
           const coveredItemIndex = getIndex(over.id);
           if (activeItemIndex !== coveredItemIndex) {
-            onCardsReorder(arrayMove(cards, activeItemIndex, coveredItemIndex));
+            const card = cards[activeItemIndex];
+            onCardsReorder({
+              id: card.id,
+              toIdx: coveredItemIndex,
+            });
           }
         }
         setActiveId(null);

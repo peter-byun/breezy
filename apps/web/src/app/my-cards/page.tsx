@@ -4,12 +4,13 @@ import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 import {
   DraggableActionCardList,
+  OnCardsReorder,
   OnVisibilitySwitchClick,
 } from "./components/DraggableActionCardList/DraggableActionCardList";
 import { EditCardDialog } from "./components/EditCard/EditCardDialog";
 import { useCard } from "@/features/card/useCard";
 import { useOverlay } from "@toss/use-overlay";
-import { Card } from "@/features/card/api/type";
+import { Card, CardId } from "@/features/card/api/type";
 import { AddCardButton } from "./components/AddCard/AddCardButton";
 import { AddCardDialog } from "./components/AddCard/AddCardDialog";
 import { useOpenAlert } from "@/ui-components/alert/useOpenAlert";
@@ -20,20 +21,52 @@ import { CardListErrorFallback } from "./components/DraggableActionCardList/Card
 
 import { PageBody } from "@/layouts/page-layout/PageBody";
 import { css } from "@emotion/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { breezyApiClient } from "@/features/card/api/api";
+import { getCardQueryOptions } from "@/features/card/api/queryOptions";
+import { arrayMove } from "@dnd-kit/sortable";
 
 export default function MyCards() {
-  const {
-    cards,
-    setCards,
-    createCard,
-    editCard,
-    deleteCard,
-    memorizeCard,
-    forgetCard,
-  } = useCard();
+  const { cards, createCard, editCard, deleteCard, memorizeCard, forgetCard } =
+    useCard();
 
-  const handleCardsReorder = (cards: Card[]) => {
-    setCards(cards);
+  const queryClient = useQueryClient();
+  const cardReorderMutation = useMutation({
+    mutationFn: ({ id, toIdx }: { id: CardId; toIdx: number }) =>
+      breezyApiClient.patch(`/card/${id}/reorder`, {
+        toIdx,
+      }),
+    onMutate: async (requestBody) => {
+      await queryClient.cancelQueries(getCardQueryOptions);
+      const prevCards = queryClient.getQueryData(getCardQueryOptions.queryKey);
+
+      queryClient.setQueryData(
+        getCardQueryOptions.queryKey,
+        (oldCards: Card[]) => {
+          const cardIdx = oldCards.findIndex(
+            (card) => card.id === requestBody.id
+          );
+          if (typeof cardIdx !== "number") {
+            throw Error("Card to reorder does not exist");
+          }
+          return arrayMove(oldCards, cardIdx, requestBody.toIdx);
+        }
+      );
+
+      return {
+        prevCards,
+      };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        getCardQueryOptions.queryKey,
+        () => context?.prevCards
+      );
+    },
+    onSettled: () => queryClient.invalidateQueries(getCardQueryOptions),
+  });
+  const handleCardsReorder: OnCardsReorder = (params) => {
+    cardReorderMutation.mutate(params);
   };
 
   const openAlert = useOpenAlert();
