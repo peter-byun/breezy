@@ -25,6 +25,7 @@ export const FlipCardRoot = styled.div<{
   }
 
   touch-action: none;
+  user-select: none;
 `;
 
 export const CardContent = styled.div`
