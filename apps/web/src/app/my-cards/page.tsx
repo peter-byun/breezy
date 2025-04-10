@@ -46,7 +46,7 @@ export default function MyCards() {
           const cardIdx = oldCards.findIndex(
             (card) => card.id === requestBody.id
           );
-          if (typeof cardIdx !== "number") {
+          if (cardIdx === -1) {
             throw Error("Card to reorder does not exist");
           }
           return arrayMove(oldCards, cardIdx, requestBody.toIdx);

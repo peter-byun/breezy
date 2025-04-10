@@ -81,7 +81,7 @@ export const handlers = [
     const requestBody = await request.json();
 
     const from = cards.findIndex((card) => card.id === cardId);
-    if (typeof from !== "number") {
+    if (from === -1) {
       return new HttpResponse(null, {
         status: 400,
         statusText: "Card not found",
