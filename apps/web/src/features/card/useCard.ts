@@ -24,15 +24,6 @@ export const useCard = () => {
     });
   };
 
-  const moveCardToBottom = (id: CardId) => {
-    const lastIdx = cards.length - 1;
-    const toIdx = lastIdx < 0 ? 0 : lastIdx;
-
-    breezyApiClient.patch(`/card/${id}/reorder`, {
-      toIdx,
-    });
-  };
-
   const editCard = (id: CardId, card: Pick<Card, "title" | "content">) => {
     breezyApiClient.patch(`/card/${id}`, card);
   };
@@ -45,7 +36,6 @@ export const useCard = () => {
     cards,
     memorizeCard,
     forgetCard,
-    moveCardToBottom,
     createCard,
     editCard,
     deleteCard,

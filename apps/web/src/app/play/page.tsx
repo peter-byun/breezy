@@ -17,15 +17,15 @@ import { ErrorBoundary } from "@suspensive/react";
 import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFallback";
 
 export default function Play() {
-  const { cards, memorizeCard, moveCardToBottom } = useCard();
+  const { cards } = useCard();
 
   const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
   useEffect(() => {
     setCardsToShow(filterMemorizedCards(cards));
   }, [cards]);
 
-  const hideCard = (cardRef: FlipCardRef) => {
-    return cardRef.current?.animate(
+  const hideCard = async (cardRef: FlipCardRef, cardId: string) => {
+    await cardRef.current?.animate(
       [
         {
           opacity: 1,
@@ -39,6 +39,25 @@ export default function Play() {
         iterations: 1,
       }
     ).finished;
+    if (cardRef.current?.style) {
+      cardRef.current.style.opacity = "0";
+    }
+
+    setCardsToShow((oldCards) => {
+      return oldCards.filter((card) => card.id !== cardId);
+    });
+  };
+
+  const moveCardToBottom = (cardId: string) => {
+    const cardIdxToMove = cardsToShow.findIndex((card) => card.id === cardId);
+    if (cardIdxToMove === -1) {
+      throw Error("Could not find the card to move.");
+    }
+
+    const cardCopy = { ...cardsToShow[cardIdxToMove] };
+    cardsToShow.splice(cardIdxToMove, 1);
+
+    setCardsToShow([...cardsToShow, cardCopy]);
   };
 
   const resetCards = () => {
@@ -75,12 +94,7 @@ export default function Play() {
                 zIndex={getCardZIndex(idx)}
                 onSwipeLeft={(card, ref) => {
                   try {
-                    hideCard(ref)?.then(() => {
-                      if (ref.current?.style) {
-                        ref.current.style.opacity = "0";
-                        memorizeCard(card.id);
-                      }
-                    });
+                    hideCard(ref, card.id);
                   } catch {
                     openToast((props) => (
                       <Toast
