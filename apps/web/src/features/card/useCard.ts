@@ -4,32 +4,42 @@ import { breezyApiClient } from "./api/api";
 import { getCardQueryOptions } from "./api/queryOptions";
 import { Card, CardId } from "./api/type";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 export const useCard = () => {
   const { data: cards } = useSuspenseQuery(getCardQueryOptions);
 
-  const createCard = (card: Pick<Card, "title" | "content">) => {
-    breezyApiClient.post("/card", card);
+  const queryClient = useQueryClient();
+  const createCard = async (card: Pick<Card, "title" | "content">) => {
+    await breezyApiClient.post("/card", card);
+    queryClient.invalidateQueries(getCardQueryOptions);
   };
 
-  const memorizeCard = (id: CardId) => {
-    breezyApiClient.patch(`/card/${id}/memorized`, {
+  // TODO: For instant feedback, implement optimistic update and error handling with a toast message
+  const memorizeCard = async (id: CardId) => {
+    await breezyApiClient.patch(`/card/${id}/memorized`, {
       memorized: true,
     });
+    queryClient.invalidateQueries(getCardQueryOptions);
   };
-  const forgetCard = (id: CardId) => {
-    breezyApiClient.patch(`/card/${id}/memorized`, {
+  const forgetCard = async (id: CardId) => {
+    await breezyApiClient.patch(`/card/${id}/memorized`, {
       memorized: false,
     });
+    queryClient.invalidateQueries(getCardQueryOptions);
   };
 
-  const editCard = (id: CardId, card: Pick<Card, "title" | "content">) => {
-    breezyApiClient.patch(`/card/${id}`, card);
+  const editCard = async (
+    id: CardId,
+    card: Pick<Card, "title" | "content">
+  ) => {
+    await breezyApiClient.patch(`/card/${id}`, card);
+    queryClient.invalidateQueries(getCardQueryOptions);
   };
 
-  const deleteCard = (id: CardId) => {
-    breezyApiClient.delete(`/card/${id}`);
+  const deleteCard = async (id: CardId) => {
+    await breezyApiClient.delete(`/card/${id}`);
+    queryClient.invalidateQueries(getCardQueryOptions);
   };
 
   return {

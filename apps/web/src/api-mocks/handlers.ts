@@ -9,10 +9,10 @@ export const handlers = [
   http.get(`${API_URL}/cards`, () => {
     return HttpResponse.json(cards);
   }),
-  http.post<PathParams, { card: Pick<Card, "title" | "content"> }>(
+  http.post<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card`,
     async ({ request }) => {
-      const body = await request.json();
+      const requestBody = await request.json();
 
       const newCardDefaultProps: Omit<Card, "title" | "content"> = {
         order: cards.length + 1,
@@ -23,7 +23,7 @@ export const handlers = [
       };
       const newCard: Card = {
         ...newCardDefaultProps,
-        ...body.card,
+        ...requestBody,
       };
 
       cards = [...cards, newCard];
@@ -33,15 +33,15 @@ export const handlers = [
       });
     }
   ),
-  http.patch<PathParams, { card: Pick<Card, "title" | "content"> }>(
+  http.patch<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card/:cardId`,
     async ({ params, request }) => {
       const cardId = params.cardId;
-      const body = await request.json();
+      const requestBody = await request.json();
 
       cards = cards.map((card) =>
         card.id === cardId
-          ? { ...card, title: body.card.title, content: body.card.content }
+          ? { ...card, title: requestBody.title, content: requestBody.content }
           : card
       );
 
