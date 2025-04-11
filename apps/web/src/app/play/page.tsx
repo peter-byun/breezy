@@ -1,6 +1,5 @@
 "use client";
 import { FlipCard, FlipCardRef } from "@/app/play/components/FlipCard/FlipCard";
-import { useCard } from "@/features/card/useCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 
@@ -15,9 +14,11 @@ import { useOpenToast } from "@/ui-components/toast/useOpenToast";
 import { Toast } from "@/ui-components/toast/Toast";
 import { ErrorBoundary } from "@suspensive/react";
 import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFallback";
+import { getCardQueryOptions } from "@/features/card/api/queryOptions";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function Play() {
-  const { cards } = useCard();
+  const { data: cards } = useSuspenseQuery(getCardQueryOptions);
 
   const [cardsToShow, setCardsToShow] = useState(filterMemorizedCards(cards));
   useEffect(() => {
