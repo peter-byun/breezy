@@ -1,17 +1,21 @@
 import { envVars } from "@/env-var/envVars";
 import { dummyCards } from "@/features/card/api/dummy";
 import { Card } from "@/features/card/api/type";
-import { http, HttpResponse, PathParams } from "msw";
+import { delay, http, HttpResponse, PathParams } from "msw";
 
 const API_URL = envVars.NEXT_PUBLIC_BREEZY_API_URL;
 
 export const handlers = [
-  http.get(`${API_URL}/cards`, () => {
+  http.get(`${API_URL}/cards`, async () => {
+    await delay();
+
     return HttpResponse.json(cards);
   }),
   http.post<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card`,
     async ({ request }) => {
+      await delay();
+
       const requestBody = await request.json();
 
       const newCardDefaultProps: Omit<Card, "title" | "content"> = {
@@ -36,6 +40,8 @@ export const handlers = [
   http.patch<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card/:cardId`,
     async ({ params, request }) => {
+      await delay();
+
       const cardId = params.cardId;
       const requestBody = await request.json();
 
@@ -53,6 +59,8 @@ export const handlers = [
   http.patch<PathParams<"cardId">, Pick<Card, "memorized">>(
     `${API_URL}/card/:cardId/memorized`,
     async ({ params, request }) => {
+      await delay();
+
       const cardId = params.cardId;
 
       const body = await request.json();
@@ -77,6 +85,8 @@ export const handlers = [
       toIdx: number;
     }
   >(`${API_URL}/card/:cardId/reorder`, async ({ params, request }) => {
+    await delay();
+
     const cardId = params.cardId;
     const requestBody = await request.json();
 
@@ -101,6 +111,8 @@ export const handlers = [
   http.delete<PathParams<"cardId">>(
     `${API_URL}/card/:cardId`,
     async ({ params }) => {
+      await delay();
+
       const cardIdxToForget = cards.findIndex(
         (card) => card.id === String(params.cardId)
       );
