@@ -102,18 +102,19 @@ export default function MyCards() {
   };
 
   const editCardOverlay = useOverlay();
-  const handleEditClick = (cardId: string) => {
+  const handleEditClick = (card: Card) => {
     editCardOverlay.open(({ isOpen, close }) => (
       <EditCardDialog
+        currentCard={card}
         open={isOpen}
         setOpen={(nextOpen) => {
           if (!nextOpen) {
             close();
           }
         }}
-        onSubmit={(card) => {
+        onSubmit={(updatedCard) => {
           try {
-            editCard(cardId, card);
+            editCard(card.id, updatedCard);
           } catch {
             openAlert((props) => (
               <Alert

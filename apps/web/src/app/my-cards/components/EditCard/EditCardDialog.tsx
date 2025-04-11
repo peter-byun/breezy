@@ -5,6 +5,7 @@ import { cardSchema } from "@/features/card/validation/cardSchema";
 import { DialogBaseProps } from "@/ui-components/dialog/dialogType";
 
 interface Props extends DialogBaseProps {
+  currentCard: UpdatedCard;
   onSubmit: (card: UpdatedCard) => void;
 }
 type UpdatedCard = {
@@ -12,11 +13,16 @@ type UpdatedCard = {
   content: string;
 };
 
-export const EditCardDialog = ({ open, setOpen, onSubmit }: Props) => {
+export const EditCardDialog = ({
+  currentCard,
+  open,
+  setOpen,
+  onSubmit,
+}: Props) => {
   const form = useAppForm({
     defaultValues: {
-      title: "",
-      content: "",
+      title: currentCard.title,
+      content: currentCard.content,
     },
     validators: {
       onSubmit: cardSchema,

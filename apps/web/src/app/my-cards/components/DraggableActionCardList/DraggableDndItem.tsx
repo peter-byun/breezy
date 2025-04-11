@@ -20,7 +20,7 @@ interface Props {
   wrapperStyle: ItemStyle;
 
   card: Card;
-  onEditClick: (cardId: string) => void;
+  onEditClick: (card: Card) => void;
   onDeleteClick: (cardId: string) => void;
   OnVisibilitySwitchClick: OnVisibilitySwitchClick;
 }
@@ -79,7 +79,7 @@ export const DraggableDndItem = memo(function Sortable({
           />
           <EditCardButton
             onClick={() => {
-              onEditClick(card.id);
+              onEditClick(card);
             }}
           />
           <DeleteCardButton
@@ -90,13 +90,7 @@ export const DraggableDndItem = memo(function Sortable({
         </Flex>
       </DndItemLayout>
     ),
-    [
-      card.id,
-      card.memorized,
-      OnVisibilitySwitchClick,
-      onEditClick,
-      onDeleteClick,
-    ]
+    [card, OnVisibilitySwitchClick, onEditClick, onDeleteClick]
   );
 
   return (

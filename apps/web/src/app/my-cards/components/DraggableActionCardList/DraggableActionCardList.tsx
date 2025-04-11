@@ -32,7 +32,7 @@ import { isBrowser, isNotNil } from "es-toolkit";
 interface Props {
   cards: Card[];
   onCardsReorder: OnCardsReorder;
-  onEditClick: (cardId: string) => void;
+  onEditClick: (cardId: Card) => void;
   onDeleteClick: (cardId: string) => void;
   OnVisibilitySwitchClick: OnVisibilitySwitchClick;
 }
