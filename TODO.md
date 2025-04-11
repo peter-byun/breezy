@@ -7,7 +7,6 @@
 
 ### Use Cases
 
-- Edit modal should be filled with the current data
 - Refactor my-cards page
   - non-blocking suspense
   - separating concerns
