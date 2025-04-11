@@ -2,7 +2,6 @@ import { css } from "@emotion/react";
 
 interface Props {
   children: React.ReactNode;
-  center?: boolean;
 }
 
 export function DndListLayout({ children }: Props) {

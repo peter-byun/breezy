@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import VirtualList from "react-tiny-virtual-list";
 import styles from "./draggable-action-card-list.module.css";
@@ -19,6 +19,7 @@ import {
   sortableKeyboardCoordinates,
   SortableContext,
   verticalListSortingStrategy,
+  arrayMove,
 } from "@dnd-kit/sortable";
 
 import { Card } from "@/features/card/api/type";
@@ -35,7 +36,11 @@ interface Props {
   onDeleteClick: (cardId: string) => void;
   OnVisibilitySwitchClick: OnVisibilitySwitchClick;
 }
-export type OnCardsReorder = (params: { id: string; toIdx: number }) => void;
+export type OnCardsReorder = (params: {
+  id: string;
+  toIdx: number;
+  localCards: Card[];
+}) => void;
 export type OnVisibilitySwitchClick = (
   cardId: string,
   checked: CheckedState
@@ -53,7 +58,11 @@ export const DraggableActionCardList = ({
   onDeleteClick,
   OnVisibilitySwitchClick,
 }: Props) => {
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [localCards, setLocalCards] = useState(cards);
+  useEffect(() => {
+    setLocalCards(cards);
+  }, [cards]);
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -66,15 +75,13 @@ export const DraggableActionCardList = ({
     })
   );
 
-  const activeItemIndex = activeId != null ? getIndex(activeId) : -1;
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const activeItemIndex =
+    activeId != null ? getCardIndexById(localCards, activeId) : -1;
   const activeItemIndices =
     activeId != null
-      ? [cards.findIndex((card) => card.id === activeId)]
+      ? [localCards.findIndex((card) => card.id === activeId)]
       : undefined;
-
-  function getIndex(id: UniqueIdentifier) {
-    return cards.findIndex((card) => card.id === id);
-  }
 
   return (
     <DndContext
@@ -85,12 +92,17 @@ export const DraggableActionCardList = ({
       }}
       onDragEnd={({ over }) => {
         if (over) {
-          const coveredItemIndex = getIndex(over.id);
+          const coveredItemIndex = getCardIndexById(localCards, over.id);
           if (activeItemIndex !== coveredItemIndex) {
-            const card = cards[activeItemIndex];
+            setLocalCards(
+              arrayMove(localCards, activeItemIndex, coveredItemIndex)
+            );
+
+            const card = localCards[activeItemIndex];
             onCardsReorder({
               id: card.id,
               toIdx: coveredItemIndex,
+              localCards,
             });
           }
         }
@@ -98,13 +110,16 @@ export const DraggableActionCardList = ({
       }}
       onDragCancel={() => setActiveId(null)}
     >
-      <DndListLayout center={true}>
-        <SortableContext items={cards} strategy={verticalListSortingStrategy}>
+      <DndListLayout>
+        <SortableContext
+          items={localCards}
+          strategy={verticalListSortingStrategy}
+        >
           <VirtualList
-            itemCount={cards.length}
+            itemCount={localCards.length}
             stickyIndices={activeItemIndices}
             renderItem={({ index, style }) => {
-              const card = cards[index];
+              const card = localCards[index];
               return (
                 <DraggableDndItem
                   key={card.id}
@@ -137,3 +152,7 @@ export const DraggableActionCardList = ({
     </DndContext>
   );
 };
+
+function getCardIndexById(cards: Card[], id: UniqueIdentifier) {
+  return cards.findIndex((card) => card.id === id);
+}

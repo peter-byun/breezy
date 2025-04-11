@@ -24,35 +24,34 @@ import { css } from "@emotion/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { breezyApiClient } from "@/features/card/api/api";
 import { getCardQueryOptions } from "@/features/card/api/queryOptions";
-import { arrayMove } from "@dnd-kit/sortable";
+import { useOpenToast } from "@/ui-components/toast/useOpenToast";
+import { Toast } from "@/ui-components/toast/Toast";
 
 export default function MyCards() {
   const { cards, createCard, editCard, deleteCard, memorizeCard, forgetCard } =
     useCard();
 
   const queryClient = useQueryClient();
+  const openToast = useOpenToast();
   const cardReorderMutation = useMutation({
-    mutationFn: ({ id, toIdx }: { id: CardId; toIdx: number }) =>
+    mutationFn: ({
+      id,
+      toIdx,
+    }: {
+      id: CardId;
+      toIdx: number;
+      localCards: Card[];
+    }) =>
       breezyApiClient.patch(`/card/${id}/reorder`, {
         toIdx,
       }),
     onMutate: async (requestBody) => {
       await queryClient.cancelQueries(getCardQueryOptions);
+      queryClient.setQueryData(getCardQueryOptions.queryKey, () => {
+        return requestBody.localCards;
+      });
+      // Save previous cards to rollback on error
       const prevCards = queryClient.getQueryData(getCardQueryOptions.queryKey);
-
-      queryClient.setQueryData(
-        getCardQueryOptions.queryKey,
-        (oldCards: Card[]) => {
-          const cardIdx = oldCards.findIndex(
-            (card) => card.id === requestBody.id
-          );
-          if (cardIdx === -1) {
-            throw Error("Card to reorder does not exist");
-          }
-          return arrayMove(oldCards, cardIdx, requestBody.toIdx);
-        }
-      );
-
       return {
         prevCards,
       };
@@ -62,6 +61,9 @@ export default function MyCards() {
         getCardQueryOptions.queryKey,
         () => context?.prevCards
       );
+      openToast((props) => (
+        <Toast {...props} title="An error occurred while moving a card." />
+      ));
     },
     onSettled: () => queryClient.invalidateQueries(getCardQueryOptions),
   });
