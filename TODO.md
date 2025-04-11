@@ -1,12 +1,13 @@
-## High-Level Plans
+# High-Level Plan
 
 1. Build MVP features using dummy data
 2. Integrate with the backend
 
-## Use Cases
+## MVP Features with mock API
 
-- Fix play/my-cards pages
-  - Mock API integration broke most features
+### Use Cases
+
+- Edit modal should be filled with the current data
 - Refactor my-cards page
   - non-blocking suspense
   - separating concerns
