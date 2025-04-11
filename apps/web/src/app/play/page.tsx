@@ -16,6 +16,7 @@ import { ErrorBoundary } from "@suspensive/react";
 import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFallback";
 import { getCardQueryOptions } from "@/features/card/api/queryOptions";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { PlayOnboarding } from "./components/PlayOnboarding/PlayOnboarding";
 
 export default function Play() {
   const { data: cards } = useSuspenseQuery(getCardQueryOptions);
@@ -79,6 +80,8 @@ export default function Play() {
 
   return (
     <PageLayout>
+      <PlayOnboarding />
+
       <TopNavBar />
       <PageBody
         css={css`
