@@ -4,11 +4,9 @@ import { breezyApiClient } from "./api/api";
 import { getCardQueryOptions } from "./api/queryOptions";
 import { Card, CardId } from "./api/type";
 
-import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-export const useCard = () => {
-  const { data: cards } = useSuspenseQuery(getCardQueryOptions);
-
+export const useMutateCard = () => {
   const queryClient = useQueryClient();
   const createCard = async (card: Pick<Card, "title" | "content">) => {
     await breezyApiClient.post("/card", card);
@@ -43,7 +41,6 @@ export const useCard = () => {
   };
 
   return {
-    cards,
     memorizeCard,
     forgetCard,
     createCard,
