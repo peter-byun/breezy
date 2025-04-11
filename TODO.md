@@ -7,9 +7,6 @@
 
 ### Use Cases
 
-- Refactor my-cards page
-  - non-blocking suspense
-  - separating concerns
 - Onboarding experience
   - The play page
 - Better error handling
@@ -24,3 +21,5 @@
       - play
         - Page-level error UI
 - Implement loading.tsx pages
+- Fix MSW server-side fetching errors
+- Write tests
