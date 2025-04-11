@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "MyCards",
+  title: "My Cards - Breezy",
   description: "Manage your cards",
 };
 
