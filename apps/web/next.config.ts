@@ -12,7 +12,7 @@ export default withSentryConfig(nextConfig, {
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
   org: "pixelperfectprogramminmg",
   project: "javascript-nextjs",
-  silent: !process.env.CI,
+  silent: true,
   widenClientFileUpload: true,
   disableLogger: true,
   automaticVercelMonitors: true,
