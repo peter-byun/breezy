@@ -77,7 +77,7 @@ export const EditCardDialog = ({
               <form.AppField name="content">
                 {(field) => (
                   <>
-                    <field.FormTextField
+                    <field.FormTextArea
                       placeholder="Enter the content for title"
                       defaultValue={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
