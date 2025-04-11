@@ -10,7 +10,7 @@ import { ItemStyle } from "react-tiny-virtual-list";
 import { CardVisibilitySwitch } from "../CardVisibility/CardVisibilitySwitch";
 import { EditCardButton } from "../EditCard/EditCardButton";
 import { DeleteCardButton } from "../DeleteCard/DeleteCardButton";
-import { OnVisibilitySwitchClick } from "./DraggableActionCardList";
+import { OnVisibilitySwitchClick } from "./DACardList";
 import { DndItemLayout } from "@/ui-components/dnd/DnDItem/DndItemLayout";
 import { DndItem } from "@/ui-components/dnd/DnDItem/DnDItem";
 
@@ -27,7 +27,7 @@ interface Props {
 
 const disabled = false;
 
-export const DraggableDndItem = memo(function Sortable({
+export const DndItemStatic = memo(function Sortable({
   id,
   index,
   wrapperStyle,

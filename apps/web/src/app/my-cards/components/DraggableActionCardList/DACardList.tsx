@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import VirtualList from "react-tiny-virtual-list";
-import styles from "./draggable-action-card-list.module.css";
+import styles from "./da-card-list.module.css";
 
 import {
   closestCenter,
@@ -24,13 +24,14 @@ import {
 
 import { Card } from "@/features/card/api/type";
 import { CheckedState } from "../CardVisibility/CardVisibilitySwitch";
-import { DraggableDndItem } from "./DraggableDndItem";
+import { DndItemStatic } from "./DndItemStatic";
 import { DndListLayout } from "@/ui-components/dnd/DndList/DndListLayout";
-import { ActiveDraggableDndItem } from "./ActiveDraggableDndItem";
+import { DndItemDragging } from "./DndItemDragging";
 import { isBrowser, isNotNil } from "es-toolkit";
+import { getCardQueryOptions } from "@/features/card/api/queryOptions";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 interface Props {
-  cards: Card[];
   onCardsReorder: OnCardsReorder;
   onEditClick: (cardId: Card) => void;
   onDeleteClick: (cardId: string) => void;
@@ -46,18 +47,20 @@ export type OnVisibilitySwitchClick = (
   checked: CheckedState
 ) => void;
 
-const LIST_WIDTH = 800;
+export const LIST_WIDTH = 800;
 const LIST_HEIGHT = 1000;
+export const ITEM_SIZE = 64;
 const DRAG_TRIGGER_MOUSEDOWN_MS = 50;
 const DRAG_ABORT_MOVEMENT_PX = 10;
 
-export const DraggableActionCardList = ({
-  cards,
+export const DACardList = ({
   onCardsReorder,
   onEditClick,
   onDeleteClick,
   OnVisibilitySwitchClick,
 }: Props) => {
+  const { data: cards } = useSuspenseQuery(getCardQueryOptions);
+
   const [localCards, setLocalCards] = useState(cards);
   useEffect(() => {
     setLocalCards(cards);
@@ -76,10 +79,12 @@ export const DraggableActionCardList = ({
   );
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+
   const activeItemIndex =
-    activeId != null ? getCardIndexById(localCards, activeId) : -1;
+    activeId !== null ? getCardIndexById(localCards, activeId) : -1;
+
   const activeItemIndices =
-    activeId != null
+    activeId !== null
       ? [localCards.findIndex((card) => card.id === activeId)]
       : undefined;
 
@@ -121,7 +126,7 @@ export const DraggableActionCardList = ({
             renderItem={({ index, style }) => {
               const card = localCards[index];
               return (
-                <DraggableDndItem
+                <DndItemStatic
                   key={card.id}
                   id={card.id}
                   index={index}
@@ -135,7 +140,7 @@ export const DraggableActionCardList = ({
             }}
             width={LIST_WIDTH}
             height={LIST_HEIGHT}
-            itemSize={64}
+            itemSize={ITEM_SIZE}
             className={styles.VirtualList}
           />
         </SortableContext>
@@ -144,7 +149,7 @@ export const DraggableActionCardList = ({
         createPortal(
           <DragOverlay adjustScale={false}>
             {isNotNil(activeId) && (
-              <ActiveDraggableDndItem title={cards[activeItemIndex]?.title} />
+              <DndItemDragging title={cards[activeItemIndex]?.title} />
             )}
           </DragOverlay>,
           document.body
