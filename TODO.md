@@ -7,8 +7,6 @@
 
 ### Use Cases
 
-- Onboarding experience
-  - The play page
 - Better error handling
   - Card reload feature from the error fallback
   - Report critical errors
