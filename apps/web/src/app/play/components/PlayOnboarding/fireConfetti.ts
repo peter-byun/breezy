@@ -1,9 +1,10 @@
 import { confetti, ConfettiOptions } from "@tsparticles/confetti";
-import { delay } from "es-toolkit";
+import { delay, isBrowser } from "es-toolkit";
 
 const count = 200;
 const defaults = {
   origin: { y: 0.8 },
+  zIndex: 0,
 };
 
 function fire(particleRatio: number, opts: ConfettiOptions) {
@@ -103,4 +104,11 @@ export const fireConfetti = async () => {
     spread: 120,
     startVelocity: 45,
   });
+  return delay(2000);
+};
+
+export const deleteConfettiCanvas = () => {
+  if (isBrowser()) {
+    document.querySelector("#confetti")?.remove();
+  }
 };

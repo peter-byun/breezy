@@ -1,17 +1,20 @@
 import { Alert } from "@/ui-components/alert/Alert";
 import { useOpenAlert } from "@/ui-components/alert/useOpenAlert";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
-import { useLocalStorage, useIsMounted } from "usehooks-ts";
+import { useEffect } from "react";
+import { useIsMounted } from "usehooks-ts";
 import { OnboardingStep1 } from "./OnboardingStep/OnboardingStep1";
 import { OnboardingStep2 } from "./OnboardingStep/OnboardingStep2";
 import { OnboardingStep3 } from "./OnboardingStep/OnboardingStep3";
+import { useOnboardingState } from "./useOnboardingState";
 
 export const PlayOnboarding = ({ currentStep }: { currentStep: number }) => {
-  const [onboardingTriggered, setOnboardingTriggered] = useLocalStorage(
-    "onboardingTriggered",
-    false
-  );
+  const {
+    onboardingTriggered,
+    setOnboardingTriggered,
+    showOnboardingLayer,
+    setShowOnboardingLayer,
+  } = useOnboardingState();
 
   const openAlert = useOpenAlert();
   const isMounted = useIsMounted();
@@ -41,9 +44,13 @@ export const PlayOnboarding = ({ currentStep }: { currentStep: number }) => {
     };
 
     showOnboardingAlert();
-  }, [isMounted, onboardingTriggered, openAlert, setOnboardingTriggered]);
-
-  const [showOnboardingLayer, setShowOnboardingLayer] = useState(false);
+  }, [
+    isMounted,
+    onboardingTriggered,
+    openAlert,
+    setOnboardingTriggered,
+    setShowOnboardingLayer,
+  ]);
 
   if (!showOnboardingLayer) {
     return null;

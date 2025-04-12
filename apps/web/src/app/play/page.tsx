@@ -18,7 +18,11 @@ import { getCardQueryOptions } from "@/features/card/api/queryOptions";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { PlayOnboarding } from "./components/PlayOnboarding/PlayOnboarding";
 import { useStep } from "usehooks-ts";
-import { fireConfetti } from "./components/PlayOnboarding/fireConfetti";
+import {
+  deleteConfettiCanvas,
+  fireConfetti,
+} from "./components/PlayOnboarding/fireConfetti";
+import { useOnboardingState } from "./components/PlayOnboarding/useOnboardingState";
 
 export default function Play() {
   const { data: cards } = useSuspenseQuery(getCardQueryOptions);
@@ -81,6 +85,7 @@ export default function Play() {
   const openToast = useOpenToast();
 
   const [currentStep, helpers] = useStep(4);
+  const { showOnboardingLayer, setShowOnboardingLayer } = useOnboardingState();
 
   return (
     <PageLayout>
@@ -133,9 +138,12 @@ export default function Play() {
                   }
                 }}
                 onFlip={() => {
-                  if (currentStep === 3) {
+                  if (currentStep === 3 && showOnboardingLayer) {
                     helpers.setStep(4);
-                    fireConfetti();
+                    fireConfetti().then(() => {
+                      deleteConfettiCanvas();
+                    });
+                    setShowOnboardingLayer(false);
                   }
                 }}
               >
