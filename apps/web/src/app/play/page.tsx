@@ -17,6 +17,8 @@ import { CardStackErrorFallback } from "./components/CardStack/CardStackErrorFal
 import { getCardQueryOptions } from "@/features/card/api/queryOptions";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { PlayOnboarding } from "./components/PlayOnboarding/PlayOnboarding";
+import { useStep } from "usehooks-ts";
+import { fireConfetti } from "./components/PlayOnboarding/fireConfetti";
 
 export default function Play() {
   const { data: cards } = useSuspenseQuery(getCardQueryOptions);
@@ -78,9 +80,11 @@ export default function Play() {
 
   const openToast = useOpenToast();
 
+  const [currentStep, helpers] = useStep(4);
+
   return (
     <PageLayout>
-      <PlayOnboarding />
+      <PlayOnboarding currentStep={currentStep} />
 
       <TopNavBar />
       <PageBody
@@ -99,6 +103,10 @@ export default function Play() {
                 onSwipeLeft={(card, ref) => {
                   try {
                     hideCard(ref, card.id);
+
+                    if (currentStep === 1) {
+                      helpers.setStep(2);
+                    }
                   } catch {
                     openToast((props) => (
                       <Toast
@@ -111,6 +119,10 @@ export default function Play() {
                 onSwipeRight={(card) => {
                   try {
                     moveCardToBottom(card.id);
+
+                    if (currentStep === 2) {
+                      helpers.setStep(3);
+                    }
                   } catch {
                     openToast((props) => (
                       <Toast
@@ -118,6 +130,12 @@ export default function Play() {
                         title="Failed to move a card to the bottom of a stack."
                       />
                     ));
+                  }
+                }}
+                onFlip={() => {
+                  if (currentStep === 3) {
+                    helpers.setStep(4);
+                    fireConfetti();
                   }
                 }}
               >

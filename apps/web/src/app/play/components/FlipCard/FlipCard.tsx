@@ -25,6 +25,7 @@ type FlipCardProps = PropsWithChildren<{
   size?: number;
   onSwipeLeft?: (card: Card, ref: FlipCardRef) => void;
   onSwipeRight?: (card: Card, ref: FlipCardRef) => void;
+  onFlip: () => void;
 }>;
 export type FlipCardRef = RefObject<HTMLDivElement | null>;
 
@@ -102,6 +103,8 @@ export const FlipCard = (props: FlipCardProps) => {
         flipEffectApi.start({
           transform: flipped ? CARD_ROTATION_FRONT : CARD_ROTATION_BACK,
         });
+
+        props.onFlip();
       }
     }
   );
