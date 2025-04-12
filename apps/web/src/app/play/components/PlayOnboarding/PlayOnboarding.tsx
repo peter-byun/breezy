@@ -2,13 +2,12 @@ import { Alert } from "@/ui-components/alert/Alert";
 import { useOpenAlert } from "@/ui-components/alert/useOpenAlert";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
-import { useLocalStorage, useIsMounted, useStep } from "usehooks-ts";
+import { useLocalStorage, useIsMounted } from "usehooks-ts";
 import { OnboardingStep1 } from "./OnboardingStep/OnboardingStep1";
 import { OnboardingStep2 } from "./OnboardingStep/OnboardingStep2";
 import { OnboardingStep3 } from "./OnboardingStep/OnboardingStep3";
-import { Button } from "@radix-ui/themes";
 
-export const PlayOnboarding = () => {
+export const PlayOnboarding = ({ currentStep }: { currentStep: number }) => {
   const [onboardingTriggered, setOnboardingTriggered] = useLocalStorage(
     "onboardingTriggered",
     false
@@ -45,18 +44,14 @@ export const PlayOnboarding = () => {
   }, [isMounted, onboardingTriggered, openAlert, setOnboardingTriggered]);
 
   const [showOnboardingLayer, setShowOnboardingLayer] = useState(false);
-  const [currentStep, helpers] = useStep(4);
 
-  // if (!showOnboardingLayer) {
-  //   return null;
-  // }
+  if (!showOnboardingLayer) {
+    return null;
+  }
 
   if (currentStep === 1) {
     return (
       <PlayOnboardingLayout>
-        <Button onClick={helpers.goToNextStep} size={"4"}>
-          Skip
-        </Button>
         <OnboardingStep1 />
       </PlayOnboardingLayout>
     );
@@ -65,10 +60,6 @@ export const PlayOnboarding = () => {
     return (
       <PlayOnboardingLayout>
         <OnboardingStep2 />
-
-        <Button onClick={helpers.goToNextStep} size={"4"}>
-          Skip
-        </Button>
       </PlayOnboardingLayout>
     );
   }
@@ -76,10 +67,6 @@ export const PlayOnboarding = () => {
     return (
       <PlayOnboardingLayout>
         <OnboardingStep3 />
-
-        <Button onClick={helpers.goToNextStep} size={"4"}>
-          Skip
-        </Button>
       </PlayOnboardingLayout>
     );
   }
@@ -91,6 +78,7 @@ const PlayOnboardingLayout = styled.aside`
   position: absolute;
   top: 0px;
   left: 0px;
+  z-index: 1;
   width: 100%;
   height: 100%;
 `;
