@@ -7,17 +7,6 @@
 
 ### Use Cases
 
-- Better error handling
-  - Card reload feature from the error fallback
-  - Report critical errors
-    - pages
-      - my cards
-        - Page-level error UI and reporting, to prevent the whole app from crashing.
-          ```ts
-          captureException(); // Sentry SDK
-          ```
-      - play
-        - Page-level error UI
 - Implement loading.tsx pages
 - Fix MSW server-side fetching errors
 - Write tests
