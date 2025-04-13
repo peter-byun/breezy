@@ -7,7 +7,7 @@ const API_URL = envVars.NEXT_PUBLIC_BREEZY_API_URL;
 
 export const handlers = [
   http.get(`${API_URL}/cards`, async () => {
-    await delay();
+    await delay(2000);
 
     return HttpResponse.json(cards);
   }),
