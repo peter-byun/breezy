@@ -20,6 +20,7 @@ import {
 } from "./components/DraggableActionCardList/DACardList";
 import { DACardListError } from "./components/DraggableActionCardList/DACardListError";
 import { useEditCardModal } from "./components/EditCard/useEditCardModal";
+import { QueryErrorResetBoundary } from "@tanstack/react-query";
 
 export default function MyCards() {
   const optimisticallyReorderCard = useOptimisticReorderCards();
@@ -66,16 +67,25 @@ export default function MyCards() {
       <TopNavBar />
       <PageBody>
         <AddCardButton onClick={addCard} />
-        <ErrorBoundary fallback={<DACardListError />}>
-          <Suspense fallback={<DACardListLoading />}>
-            <DACardList
-              onCardsReorder={optimisticallyReorderCard}
-              onEditClick={editCard}
-              OnVisibilitySwitchClick={handleVisibilityCheckboxClick}
-              onDeleteClick={handleDeleteClick}
-            />
-          </Suspense>
-        </ErrorBoundary>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              fallback={({ reset: resetErrorBoundary }) => {
+                return <DACardListError onReset={resetErrorBoundary} />;
+              }}
+            >
+              <Suspense fallback={<DACardListLoading />}>
+                <DACardList
+                  onCardsReorder={optimisticallyReorderCard}
+                  onEditClick={editCard}
+                  OnVisibilitySwitchClick={handleVisibilityCheckboxClick}
+                  onDeleteClick={handleDeleteClick}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </PageBody>
     </PageLayout>
   );

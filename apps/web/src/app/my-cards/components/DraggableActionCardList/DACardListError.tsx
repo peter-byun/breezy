@@ -1,8 +1,8 @@
 import { ErrorFallback } from "@/ui-components/error/ErrorFallback";
 import { css } from "@emotion/react";
-import { Heading, Text } from "@radix-ui/themes";
+import { Button, Heading, Text } from "@radix-ui/themes";
 
-export const DACardListError = () => {
+export const DACardListError = ({ onReset }: { onReset: () => void }) => {
   return (
     <ErrorFallback css={verticalCenterStyle}>
       <Heading>{"We're Sorry"}</Heading>
@@ -11,6 +11,7 @@ export const DACardListError = () => {
         <br />
         We will fix it as soon as possible.
       </Text>
+      <Button onClick={onReset}>Reload</Button>
     </ErrorFallback>
   );
 };
