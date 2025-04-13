@@ -7,6 +7,5 @@
 
 ### Use Cases
 
-- Implement loading.tsx pages
 - Fix MSW server-side fetching errors
 - Write tests
