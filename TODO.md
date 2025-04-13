@@ -7,5 +7,4 @@
 
 ### Use Cases
 
-- Fix MSW server-side fetching errors
 - Write tests
