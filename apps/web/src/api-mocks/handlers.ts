@@ -1,20 +1,29 @@
 import { envVars } from "@/env-var/envVars";
+import { getEnvironment } from "@/env-var/getEnvironment";
 import { dummyCards } from "@/features/card/api/dummy";
 import { Card } from "@/features/card/api/type";
 import { delay, http, HttpResponse, PathParams } from "msw";
 
 const API_URL = envVars.NEXT_PUBLIC_BREEZY_API_URL;
 
+const shouldDelay = getEnvironment().isDevelopment;
+const delayBasedOnEnvironment = async (timeout?: number) => {
+  if (shouldDelay) {
+    return delay(timeout);
+  }
+  return Promise.resolve();
+};
+
 export const handlers = [
   http.get(`${API_URL}/cards`, async () => {
-    await delay(2000);
+    await delayBasedOnEnvironment(2000);
 
     return HttpResponse.json(cards);
   }),
   http.post<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card`,
     async ({ request }) => {
-      await delay();
+      await delayBasedOnEnvironment();
 
       const requestBody = await request.json();
 
@@ -40,7 +49,7 @@ export const handlers = [
   http.patch<PathParams, Pick<Card, "title" | "content">>(
     `${API_URL}/card/:cardId`,
     async ({ params, request }) => {
-      await delay();
+      await delayBasedOnEnvironment();
 
       const cardId = params.cardId;
       const requestBody = await request.json();
@@ -59,7 +68,7 @@ export const handlers = [
   http.patch<PathParams<"cardId">, Pick<Card, "memorized">>(
     `${API_URL}/card/:cardId/memorized`,
     async ({ params, request }) => {
-      await delay();
+      await delayBasedOnEnvironment();
 
       const cardId = params.cardId;
 
@@ -85,7 +94,7 @@ export const handlers = [
       toIdx: number;
     }
   >(`${API_URL}/card/:cardId/reorder`, async ({ params, request }) => {
-    await delay();
+    await delayBasedOnEnvironment();
 
     const cardId = params.cardId;
     const requestBody = await request.json();
@@ -111,7 +120,7 @@ export const handlers = [
   http.delete<PathParams<"cardId">>(
     `${API_URL}/card/:cardId`,
     async ({ params }) => {
-      await delay();
+      await delayBasedOnEnvironment();
 
       const cardIdxToForget = cards.findIndex(
         (card) => card.id === String(params.cardId)

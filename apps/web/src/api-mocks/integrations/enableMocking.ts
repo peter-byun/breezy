@@ -1,5 +1,7 @@
+import { getEnvironment } from "@/env-var/getEnvironment";
+
 export async function enableMocking() {
-  if (process.env.NODE_ENV !== "development") {
+  if (!getEnvironment().isDevelopment) {
     return;
   }
 
