@@ -11,7 +11,6 @@
 - Write tests
   - For features that are important and wouldn't change often:
     - Play
-      - Flip a card
       - Hide a card
       - Send a card to the bottom
     - MyCard
