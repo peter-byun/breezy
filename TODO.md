@@ -9,7 +9,7 @@
 ### Use Cases
 
 - Write tests
-  - For features that are important and wound't change often:
+  - For features that are important and wouldn't change often:
     - Play
       - Flip a card
       - Hide a card
