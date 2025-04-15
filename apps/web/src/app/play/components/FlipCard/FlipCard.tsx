@@ -146,7 +146,7 @@ export const FlipCard = (props: FlipCardProps) => {
         }}
       >
         <CardFront>{props.card.title}</CardFront>
-        <CardBack>{props.card.content}</CardBack>
+        <CardBack data-testid="flip-card-back">{props.card.content}</CardBack>
       </CardContentAnimated>
     </FlipCardRootAnimated>
   );

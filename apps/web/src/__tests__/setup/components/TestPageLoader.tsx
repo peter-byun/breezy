@@ -9,7 +9,9 @@ export const TestPageLoader = ({ children }: PropsWithChildren) => {
     <Theme>
       <OverlayProvider>
         <ReactQueryProvider>
-          <Suspense fallback={<p>loading</p>}>{children}</Suspense>
+          <Suspense fallback={<p data-testid="page-loader">loading</p>}>
+            {children}
+          </Suspense>
         </ReactQueryProvider>
       </OverlayProvider>
     </Theme>
