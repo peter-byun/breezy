@@ -34,6 +34,7 @@ export const PlayOnboarding = ({ currentStep }: { currentStep: number }) => {
           description="Let me show you how to play the game 😎"
           confirmLabel="Sounds good!"
           cancelLabel="No thanks"
+          testId="onboarding-alert"
         />
       ));
       setOnboardingTriggered(true);

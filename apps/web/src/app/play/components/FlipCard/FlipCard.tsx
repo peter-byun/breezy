@@ -138,6 +138,7 @@ export const FlipCard = (props: FlipCardProps) => {
       }}
       size={size}
       {...bind()}
+      data-testid="flip-card"
     >
       <CardContentAnimated
         style={{

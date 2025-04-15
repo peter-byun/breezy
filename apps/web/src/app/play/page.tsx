@@ -1,5 +1,4 @@
 "use client";
-import { FlipCard, FlipCardRef } from "@/app/play/components/FlipCard/FlipCard";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
 
@@ -23,6 +22,7 @@ import {
   fireConfetti,
 } from "./components/PlayOnboarding/fireConfetti";
 import { useOnboardingState } from "./components/PlayOnboarding/useOnboardingState";
+import { FlipCard, FlipCardRef } from "./components/FlipCard/FlipCard";
 
 export default function Play() {
   const { data: cards } = useSuspenseQuery(getCardQueryOptions);
