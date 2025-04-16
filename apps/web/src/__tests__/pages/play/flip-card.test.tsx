@@ -8,7 +8,7 @@ import { hideOnboarding } from "../../setup/hooks/hideOnboarding";
 import { isNil } from "es-toolkit";
 import { waitForLoading } from "@/__tests__/setup/helpers/waitForLoading";
 
-test("Renders the play page", async () => {
+test("Flip a card", async () => {
   const user = userEvent.setup();
 
   render(
