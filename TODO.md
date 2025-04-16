@@ -8,17 +8,19 @@
 
 ### Use Cases
 
+- User authentication
+
+  - Make a user model
+  - Associate cards to users.
+  - SSO via Google.
+    - Associate a google id with a user's id
+
+- Setting up CI/CD
+  - Automated lint, type validation, test on push
 - Write tests
-  - For features that are important and wouldn't change often:
+  - Playwright
     - Play
       - Hide a card
       - Send a card to the bottom
     - MyCard
       - Move a card
-      - Add a card
-      - Edit a card
-      - Delete a card
-      - Toggle visibility of a card
-- User authentication
-  - SSO via Google.
-  - Associate cards to users.
