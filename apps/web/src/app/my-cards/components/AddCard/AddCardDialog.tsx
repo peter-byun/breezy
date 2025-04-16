@@ -38,7 +38,7 @@ export const AddCardDialog = ({ open, setOpen, onSubmit }: Props) => {
             form.handleSubmit();
           }}
         >
-          <Dialog.Title>Add a Card</Dialog.Title>
+          <Dialog.Title>Add a card</Dialog.Title>
           <Dialog.Description size="2" mb="4">
             Add a card to memorize.
           </Dialog.Description>

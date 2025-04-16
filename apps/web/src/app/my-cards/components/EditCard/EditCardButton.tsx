@@ -11,6 +11,7 @@ export const EditCardButton = ({ onClick }: ButtonProps) => {
       css={css`
         cursor: pointer;
       `}
+      data-testid="edit-card-button"
     >
       <Pencil1Icon width="18" height="18" color="blue" />
     </IconButton>

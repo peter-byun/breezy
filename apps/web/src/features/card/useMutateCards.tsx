@@ -1,10 +1,13 @@
 "use client";
 
+import { isNil } from "es-toolkit";
 import { breezyApiClient } from "./api/api";
 import { getCardQueryOptions } from "./api/queryOptions";
 import { Card, CardId } from "./api/type";
 
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useOpenToast } from "@/ui-components/toast/useOpenToast";
+import { Toast } from "@/ui-components/toast/Toast";
 
 export const useMutateCard = () => {
   const queryClient = useQueryClient();
@@ -35,9 +38,42 @@ export const useMutateCard = () => {
     queryClient.invalidateQueries(getCardQueryOptions);
   };
 
+  const openToast = useOpenToast();
+
+  const deleteCardMutation = useMutation({
+    mutationFn: (id: CardId) => {
+      return breezyApiClient.delete(`/card/${id}`);
+    },
+    onMutate: async (cardId) => {
+      await queryClient.cancelQueries(getCardQueryOptions);
+
+      const prevCards = queryClient.getQueryData<Card[]>(
+        getCardQueryOptions.queryKey
+      );
+      if (isNil(prevCards)) {
+        return { prevCards };
+      }
+
+      queryClient.setQueryData(getCardQueryOptions.queryKey, () => {
+        return prevCards.filter((card) => card.id !== cardId);
+      });
+
+      return {
+        prevCards,
+      };
+    },
+    onError: (_, __, context) => {
+      queryClient.setQueryData(
+        getCardQueryOptions.queryKey,
+        () => context?.prevCards
+      );
+      openToast((props) => (
+        <Toast {...props} title="An error occurred while deleting a card." />
+      ));
+    },
+  });
   const deleteCard = async (id: CardId) => {
-    await breezyApiClient.delete(`/card/${id}`);
-    queryClient.invalidateQueries(getCardQueryOptions);
+    deleteCardMutation.mutate(id);
   };
 
   return {

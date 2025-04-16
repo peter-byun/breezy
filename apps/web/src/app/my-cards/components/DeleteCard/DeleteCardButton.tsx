@@ -18,6 +18,7 @@ export const DeleteCardButton = ({
       css={css`
         cursor: pointer;
       `}
+      data-testid="delete-card-button"
     >
       <TrashIcon width="18" height="18" color="red" />
     </IconButton>

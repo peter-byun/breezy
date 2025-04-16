@@ -44,7 +44,7 @@ export const EditCardDialog = ({
             form.handleSubmit();
           }}
         >
-          <Dialog.Title>Edit Card</Dialog.Title>
+          <Dialog.Title>Edit a card</Dialog.Title>
           <Dialog.Description size="2" mb="4">
             Update the title or content.
           </Dialog.Description>

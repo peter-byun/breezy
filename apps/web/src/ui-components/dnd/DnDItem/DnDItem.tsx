@@ -24,6 +24,7 @@ export interface Props {
   wrapperStyle?: React.CSSProperties;
   title: React.ReactNode;
   actions?: React.ReactNode;
+  testid?: string;
 }
 
 export const DndItem = memo(
@@ -44,6 +45,7 @@ export const DndItem = memo(
         wrapperStyle,
         title,
         actions,
+        testid,
         ...props
       },
       ref
@@ -91,6 +93,7 @@ export const DndItem = memo(
             } as React.CSSProperties
           }
           ref={ref}
+          data-testid={testid}
         >
           <div
             className={clsx(

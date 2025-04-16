@@ -23,6 +23,7 @@ interface Props {
   onEditClick: (card: Card) => void;
   onDeleteClick: (cardId: string) => void;
   OnVisibilitySwitchClick: OnVisibilitySwitchClick;
+  testid?: string;
 }
 
 const disabled = false;
@@ -36,6 +37,7 @@ export const DndItemStatic = memo(function Sortable({
   OnVisibilitySwitchClick,
   onEditClick,
   onDeleteClick,
+  testid,
 }: Props) {
   const {
     active,
@@ -108,6 +110,7 @@ export const DndItemStatic = memo(function Sortable({
       data-id={id}
       title={title}
       actions={actions}
+      testid={testid}
       {...attributes}
     />
   );

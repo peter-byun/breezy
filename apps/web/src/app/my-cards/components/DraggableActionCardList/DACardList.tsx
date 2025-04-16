@@ -135,6 +135,7 @@ export const DACardList = ({
                   onEditClick={onEditClick}
                   OnVisibilitySwitchClick={OnVisibilitySwitchClick}
                   onDeleteClick={onDeleteClick}
+                  testid={"card-static"}
                 />
               );
             }}

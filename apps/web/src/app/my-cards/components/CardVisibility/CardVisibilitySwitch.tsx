@@ -18,6 +18,7 @@ export const CardVisibilitySwitch = ({
           `}
           color="purple"
           size={"1"}
+          data-testid="card-visibility-switch"
         />
 
         <Text color="purple">{checked ? "Visible" : "Hidden"}</Text>
