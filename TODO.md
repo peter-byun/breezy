@@ -1,19 +1,13 @@
-# High-Level Plan
-
-1. Build MVP features using dummy data
-2. Build the backend that conforms to the Frontend mock API interface
-3. Integrate the app with the backend
-
-## MVP Features with mock API
-
-### Use Cases
+### Plan
 
 - User authentication
-
-  - Make a user model
-  - Associate cards to users.
-  - SSO via Google.
+  - Build login/logout/profile features
+  - local SSO via Google.
     - Associate a google id with a user's id
+- Build the backend
+- Integrate the frontend with the backend
+
+---
 
 - Setting up CI/CD
   - Automated lint, type validation, test on push
