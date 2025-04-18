@@ -1,7 +1,7 @@
 "use client";
 
 import { isNil } from "es-toolkit";
-import { breezyApiClient } from "./api/api";
+import { breezyApiClient } from "../../features-shared/breezy-api/breezy-api-client";
 import { getCardQueryOptions } from "./api/queryOptions";
 import { Card, CardId } from "./api/type";
 

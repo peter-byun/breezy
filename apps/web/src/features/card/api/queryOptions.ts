@@ -1,4 +1,7 @@
-import { BREEZY_API_URL, breezyApiClient } from "./api";
+import {
+  BREEZY_API_URL,
+  breezyApiClient,
+} from "../../../features-shared/breezy-api/breezy-api-client";
 import { Card } from "./type";
 
 export const getCardQueryOptions = {
