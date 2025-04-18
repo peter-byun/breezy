@@ -1,6 +1,6 @@
 "use client";
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
-import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
+import { TopNavBar } from "@/features-shared/top-nav-bar/TopNavBar";
 
 import { useEffect, useState } from "react";
 import { filterMemorizedCards } from "@/features/card/helpers/filterMemorizedCards";
