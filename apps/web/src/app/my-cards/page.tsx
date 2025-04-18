@@ -1,7 +1,7 @@
 "use client";
 
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
-import { TopNavBar } from "@/layouts/nav-bar/TopNavBar";
+import { TopNavBar } from "@/features-shared/top-nav-bar/TopNavBar";
 import { AddCardButton } from "./components/AddCard/AddCardButton";
 import { useOpenAlert } from "@/ui-components/alert/useOpenAlert";
 import { Alert } from "@/ui-components/alert/Alert";
