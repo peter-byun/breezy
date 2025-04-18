@@ -3,7 +3,7 @@
 import { PageLayout } from "@/layouts/page-layout/PageLayout";
 import { css } from "@emotion/react";
 import { ReactNode } from "react";
-import { AppLoadingIndicator } from "./AppLoadingIndicator";
+import { AppLoadingIndicator } from "../../ui-components/loading/AppLoadingIndicator";
 import { TopNavBarLayout } from "@/features-shared/top-nav-bar/TopNavBarLayout";
 
 export function PageLoading({

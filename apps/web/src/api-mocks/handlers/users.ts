@@ -87,10 +87,6 @@ export const userHandlers = [
     const token = authHeader?.split("Bearer ")[1];
 
     if (isNil(token) || !activeTokens.has(token)) {
-      console.log({
-        token,
-        activeTokens,
-      });
       return HttpResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
