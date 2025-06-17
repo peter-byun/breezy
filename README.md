@@ -1,6 +1,14 @@
+<p align="center">
+  <a href="https://breezylearn.com" target="blank"><img src="assets/breezy-media.png" width="800" height="420" alt="Breezy OG banner" /></a>
+</p>
+
 # Breezy
 
-Breezy 🍃 is a delightful cross-platform flash card app that turns your learning a breeze.
+**Breezy** is an AI‑powered, interactive flash‑card platform that helps you learn **smarter** and remember **faster**.
 
-The app is under development in a monorepo, and will be shortly release.  
-previously we had frontend of the app here, but it is now incorporated into the monorepo for convenience.
+## Features
+
+- **Play interactive flashcards on any device** – mobile, tablet, or desktop.
+- **Organize content with decks** – group related cards together for faster review.
+- **Generate cards from text using AI** – turn notes or articles into ready-to-study flashcards.
+- **Gallery social features (in development)** – share your decks, browse others’, and like your favorites.
