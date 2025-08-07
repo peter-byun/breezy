@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://breezylearn.com" target="blank"><img src="assets/breezy-media.png" width="800" height="800" alt="Breezy OG banner" /></a>
+  <a href="https://breezylearn.com" target="blank"><img src="assets/breezy-banner.png" width="800" height="800" alt="Breezy OG banner" /></a>
 </p>
 
 # Breezy
