@@ -2,23 +2,9 @@
 
 An AI-powered learning platform that helps users easily explore, create, and absorb learning materials.
 
-[View Architecture Diagram](architecture.md)
+[View Architecture](architecture.md) · [View Requirements (EN)](requirements_en.md)
 
-## Key Product Features
-
-- AI-powered automatic generation of study materials (decks)
-  - Provides outlines, detailed notes, and flashcards (Markdown rendering)
-  - Supports uploads of text/PDF/Markdown/images
-  - Supports generation via prompts
-- Immersive learning features
-  - Practice tests with AI
-  - Drag-and-drop flashcards and sound effects
-- Share, save, and like study materials
-- Guest-mode browsing and Google sign-in
-- Web push notifications (FCM)
-- Responsive UI and PWA support (installable web app)
-
-## In Progress / Roadmap
+## Roadmap
 
 1. Improve engagement for passive-study features
 2. Enhance collaboration/discovery and expand to social-media-grade functionality
