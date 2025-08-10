@@ -2,7 +2,7 @@
 
 사용자가 쉽게 학습 자료를 탐색, 생성, 흡수 할 수 있게 도와주는 AI 기반의 학습 플랫폼입니다.
 
-[아키텍처 보기](architecture.md) · [요구사항 보기 (KR)](requirements_kr.md)
+[아키텍처 보기](architecture.md) · [요구사항 보기](requirements_kr.md)
 
 ## 로드맵
 

@@ -2,7 +2,7 @@
 
 An AI-powered learning platform that helps users easily explore, create, and absorb learning materials.
 
-[View Architecture](architecture.md) · [View Requirements (EN)](requirements_en.md)
+[View Architecture](architecture.md) · [View Requirements](requirements_en.md)
 
 ## Roadmap
 
