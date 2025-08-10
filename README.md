@@ -6,11 +6,6 @@
 
 **Breezy** is an AI‑powered, interactive flash‑card platform that helps you learn **smarter** and remember **faster**.
 
-<p align="center">
-  <strong>Check out the overview for more details:</strong>
-  <a href="documents/overview_en.md">English</a> · <a href="documents/overview_kr.md">한국어</a>
-</p>
-
 ## Features
 
 - 📚 AI‑Generated Learning Materials
@@ -34,9 +29,7 @@
   - Web push notifications (FCM)
   - Responsive UI and PWA support (installable web app)
 
-## Roadmap
-
-1. Improve engagement for passive learning
-2. Enhance collaboration/discovery and expand to social‑media‑grade features
-3. Cross‑platform native apps: Web (Next.js) + Mobile (Expo iOS/Android)
-4. Spaced Repetition engine
+<p align="center">
+  <strong>Check out the overview for more details:</strong>
+  <a href="documents/overview_en.md">English</a> · <a href="documents/overview_kr.md">한국어</a>
+</p>
