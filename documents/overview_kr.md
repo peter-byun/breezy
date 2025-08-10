@@ -2,14 +2,7 @@
 
 사용자가 쉽게 학습 자료를 탐색, 생성, 흡수 할 수 있게 도와주는 AI 기반의 학습 플랫폼입니다.
 
-[아키텍처 보기](architecture.md) · [요구사항 보기](requirements_kr.md)
-
-## 로드맵
-
-1. 자료 수동적 학습 기능 몰입도 개선
-2. 협업/발견 기능 완성도 개선과 소셜 미디어 수준의 기능 확장
-3. 크로스플랫폼 네이티브앱 지원: Web(Next.js) + Mobile(Expo iOS/Android)
-4. 간격 반복(Spaced Repetition) 엔진
+[요구사항 정의서 보기](requirements_kr.md) · [클라우드 리소스 아키텍처 보기](resource-architecture.md)
 
 ## 기술 스택
 

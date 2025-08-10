@@ -2,14 +2,7 @@
 
 An AI-powered learning platform that helps users easily explore, create, and absorb learning materials.
 
-[View Architecture](architecture.md) · [View Requirements](requirements_en.md)
-
-## Roadmap
-
-1. Improve engagement for passive-study features
-2. Enhance collaboration/discovery and expand to social-media-grade functionality
-3. Cross-platform native app support: Web (Next.js) + Mobile (Expo iOS/Android)
-4. Spaced Repetition engine
+[View Requirements Specification](requirements_en.md) · [View Cloud Resource Architecture](architecture.md)
 
 ## Tech Stack
 
