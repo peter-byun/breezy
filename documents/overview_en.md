@@ -2,6 +2,8 @@
 
 An AI-powered learning platform that helps users easily explore, create, and absorb learning materials.
 
+[View Architecture Diagram](architecture.md)
+
 ## Key Product Features
 
 - AI-powered automatic generation of study materials (decks)
