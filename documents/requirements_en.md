@@ -1,6 +1,6 @@
 # Software Requirements Specifications
 
-Version: 0.2 • Status: Draft • Date: 2025-08-10
+Version: 0.2 • Status: Draft
 
 ## 1. Introduction
 
