@@ -6,7 +6,8 @@ Breezy is a learning platform for users preparing for exams: users create or upl
 
 ## 2. High-Level System Overview
 
-```mermaidflowchart TD
+```mermaid
+  flowchart TD
   %% === Clients ===
   Users((Users))
   WebApp["Web App\n(Next.js)"]
@@ -44,6 +45,7 @@ Breezy is a learning platform for users preparing for exams: users create or upl
 
   %% === Ops ===
   Bastion["Bastion (SSM)"] -. port 3306 tunnel .-> RDS
+
 ```
 
 ## 3. Infrastructure (Terraform) Breakdown
