@@ -6,57 +6,45 @@ Breezy is a learning platform for users preparing for exams: users create or upl
 
 ## 2. High-Level System Overview
 
-```mermaid
-flowchart LR
-  subgraph Client
-    W[Web App (Next.js)]
-    M[Mobile App (Expo React Native)]
-  end
+```mermaidflowchart TD
+  %% === Clients ===
+  Users((Users))
+  WebApp["Web App\n(Next.js)"]
+  MobileApp["Mobile App\n(Expo)"]
+  Users --> WebApp
+  Users --> MobileApp
 
-  subgraph Edge
-    CDN[(Edge / Browser Cache)]
-    ALB[Application Load Balancer]
-  end
+  %% === Edge / DNS ===
+  DNS[Route53 DNS] --> ALB[ALB]
+  WebApp -->|HTTPS| ALB
+  MobileApp -->|HTTPS| ALB
 
-  subgraph Compute
-    ECSW[Web Service (Fargate:3000)]
-    ECSB[API Service (NestJS Fargate:3001)]
-  end
+  %% === Services (Fargate) ===
+  WebSvc["Web Service\n:3000"]
+  ApiSvc["API Service\nNestJS :3001"]
+  ALB -->|Host=www| WebSvc
+  ALB -->|Host=api| ApiSvc
+  WebSvc -->|SSR / BFF| ApiSvc
 
-  subgraph Data
-    RDS[(MySQL RDS)]
-    S3[(S3 - file uploads)]
-    Redis[(Redis - caching / queues)*]
-  end
+  %% === Data & Integrations ===
+  RDS[(MySQL RDS)]
+  S3[(S3 Storage)]
+  Anthropic["Anthropic AI"]
+  FCM["FCM Push"]
+  Params[(SSM Param Store)]
+  Logs[(CloudWatch Logs)]
+  Redis[(Redis Cache - planned)]
+  ApiSvc --> RDS
+  ApiSvc --> S3
+  ApiSvc --> Anthropic
+  ApiSvc --> FCM
+  ApiSvc --> Params
+  ApiSvc --> Logs
+  Redis -. future use .- ApiSvc
 
-  subgraph AI
-    Anthropic[Anthropic API]
-  end
-
-  subgraph Support
-    SSM[Bastion via SSM]
-    CW[CloudWatch Logs]
-    SSMParams[SSM Parameter Store]
-    Route53[Route53 DNS]
-  end
-
-  W -->|HTTPS www| ALB
-  M -->|HTTPS api| ALB
-  ALB -->|Host=www| ECSW
-  ALB -->|Host=api| ECSB
-  ECSW -->|SSR/API| ECSB
-  ECSB --> RDS
-  ECSB --> S3
-  ECSB --> Redis
-  ECSB --> SSMParams
-  ECSB --> Anthropic
-  SSM -. secure tunnel .-> RDS
-  ECSB --> CW
-  ECSW --> CW
-  Route53 --> ALB
+  %% === Ops ===
+  Bastion["Bastion (SSM)"] -. port 3306 tunnel .-> RDS
 ```
-
-\*Redis is provisioned conceptually (referenced in stack) for future caching / job orchestration.
 
 ## 3. Infrastructure (Terraform) Breakdown
 
