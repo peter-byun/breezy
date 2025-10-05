@@ -37,7 +37,7 @@
 4. Spaced Repetition
 
 <p align="center">
-  <strong>Check out the overview and the architecture document for more details:</strong>
+  <strong>Check out the documents below for more details</strong><br/>
   <a href="documents/architecture.md">Architecture</a> ·
   <a href="documents/overview_en.md">Overview(English)</a> · <a href="documents/overview_kr.md">Overview(한국어)</a>
 </p>

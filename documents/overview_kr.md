@@ -2,7 +2,7 @@
 
 사용자가 쉽게 학습 자료를 탐색, 생성, 흡수 할 수 있게 도와주는 AI 기반의 학습 플랫폼입니다.
 
-[요구사항 정의서 보기](requirements_kr.md) · [클라우드 리소스 아키텍처 보기](resource-architecture.md)
+[요구사항 정의서](requirements_kr.md) · [아키텍처 문서](architecture.md)
 
 ## 기술 스택
 

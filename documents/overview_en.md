@@ -2,7 +2,7 @@
 
 An AI-powered learning platform that helps users easily explore, create, and absorb learning materials.
 
-[View Requirements Specification](requirements_en.md) · [View Cloud Resource Architecture](architecture.md)
+[Requirements Specification](requirements_en.md) · [Architecture](architecture.md)
 
 ## Tech Stack
 
