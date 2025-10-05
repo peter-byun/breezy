@@ -48,7 +48,7 @@ Breezy is a learning platform for users preparing for exams: users create or upl
 
 ```
 
-## 3. Infrastructure (Terraform) Breakdown
+## 3. Infrastructure Breakdown
 
 ```mermaid
 graph TD
